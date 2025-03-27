@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Booking
 
-# Create your views here.
 def my_bookings(request):
-   return HttpResponse("Welcome to Minitaly booking system!")
+    bookings = Booking.objects.all().order_by('-date', '-time')  # Show most recent first
+    return render(request, 'bookings/booking_list.html', {'bookings': bookings})
