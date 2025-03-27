@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#zfpy!yg++#x%e!l_elhdn+rd#kjy8okz7r5bh7+l)7l7c&8zs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['minitaly-booking-system-de8b5948572a.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'minitaly-booking-system-de8b5948572a.herokuapp.com']
 
 
 # Application definition
