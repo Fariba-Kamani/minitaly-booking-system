@@ -1,0 +1,1 @@
+web: gunicorn minitaly.wsgi:application
