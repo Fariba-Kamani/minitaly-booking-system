@@ -27,10 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#zfpy!yg++#x%e!l_elhdn+rd#kjy8okz7r5bh7+l)7l7c&8zs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'minitaly-booking-system-de8b5948572a.herokuapp.com']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://minitaly-booking-system-de8b5948572a.herokuapp.com',
+]
 
 # Application definition
 
@@ -54,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'bookings.urls'
+ROOT_URLCONF = 'minitaly.urls'
 
 TEMPLATES = [
     {
