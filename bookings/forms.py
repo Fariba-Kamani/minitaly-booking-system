@@ -18,3 +18,19 @@ class BookingForm(forms.ModelForm):
         return date
     # Django expects the method to be called `clean_<fieldname>`
     clean_date = prevent_past_dates
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        time = cleaned_data.get('time')
+        if date and time:
+            conflicting_bookings = Booking.objects.filter(
+                date=date,
+                time=time,
+                is_cancelled=False
+            )
+            if conflicting_bookings.exists():
+                raise forms.ValidationError(
+                    "Sorry, we already have a booking at this date and time. Please choose another slot."
+                )
+        return cleaned_data

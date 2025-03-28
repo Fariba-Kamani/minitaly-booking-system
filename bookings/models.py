@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -21,3 +22,11 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s booking on {self.date} at {self.time}"
+    
+    def clean(self):
+        if Booking.objects.filter(
+            date=self.date,
+            time=self.time,
+            is_cancelled=False
+        ).exclude(pk=self.pk).exists():
+            raise ValidationError("This booking conflicts with an existing one.")
