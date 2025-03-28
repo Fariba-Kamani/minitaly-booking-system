@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.views import generic
 from .models import Booking
 
-def my_bookings(request):
-    bookings = Booking.objects.all().order_by('-date', '-time')  # Show most recent first
-    return render(request, 'bookings/booking_list.html', {'bookings': bookings})
+class BookingListView(generic.ListView):
+    model = Booking
+    template_name = 'bookings/booking_list.html'
+    context_object_name = 'bookings'
+    ordering = ['-date', '-time']

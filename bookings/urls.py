@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from .views import BookingListView
 
 urlpatterns = [
     # You can add your booking views here
-    path('', views.my_bookings, name='my_bookings'),
+    path('', BookingListView.as_view(), name='booking_list'),
 ]
