@@ -21,6 +21,7 @@ from bookings.views import home
 
 urlpatterns = [
     path('', home, name='home'),
+    path("accounts/", include("allauth.urls")),
     path('admin/', admin.site.urls),
     path('bookings/', include('bookings.urls')),
 ]
