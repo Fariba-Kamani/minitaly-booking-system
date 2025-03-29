@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_on
 from .models import Booking
 from .forms import BookingForm
 
+def home(request):
+    return render(request, 'index.html')
+
 class BookingListView(generic.ListView):
     model = Booking
     template_name = 'bookings/booking_list.html'
