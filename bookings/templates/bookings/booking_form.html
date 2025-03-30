@@ -1,6 +1,15 @@
-<h1>Book a Table</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Book</button>
-</form>
+{% extends 'base.html' %}
+
+{% block title %}Book a Table{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Book a Table</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    </form>
+</div>
+{% endblock %}
