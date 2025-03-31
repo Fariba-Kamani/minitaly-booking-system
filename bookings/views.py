@@ -3,6 +3,8 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.utils import timezone
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import UpdateView, DeleteView
 from .models import Booking
 from .forms import BookingForm
@@ -42,17 +44,20 @@ class BookingUpdateView(registered_users_only, UpdateView):
         # Only allow editing bookings that belong to the logged-in user
         return Booking.objects.filter(user=self.request.user)
     
+    def form_valid(self, form):
+        messages.success(self.request, "Your booking has been successfully updated!")
+        return super().form_valid(form)
+    
 
-class BookingDeleteView(registered_users_only, DeleteView):
+class BookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteView):
     model = Booking
     template_name = 'bookings/booking_confirm_delete.html'
     success_url = reverse_lazy('booking_list')
+    success_message = "Your booking has been cancelled."
 
     def get_queryset(self):
-        # Only allow users to cancel their own bookings
         return Booking.objects.filter(user=self.request.user)
-    
-    
+
 class BookingCreateView(registered_users_only, generic.CreateView):
     model = Booking
     form_class = BookingForm
@@ -61,4 +66,5 @@ class BookingCreateView(registered_users_only, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        messages.success(self.request, "Your booking has been successfully created!")
         return super().form_valid(form)
