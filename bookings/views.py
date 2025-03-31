@@ -3,6 +3,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.utils import timezone
+from django.views.generic.edit import UpdateView
 from .models import Booking
 from .forms import BookingForm
 
@@ -29,6 +30,17 @@ class BookingListView(generic.ListView):
         ).order_by('-date', '-time')
 
         return context
+    
+
+class BookingUpdateView(registered_users_only, UpdateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = 'bookings/booking_form.html'
+    success_url = reverse_lazy('booking_list')
+
+    def get_queryset(self):
+        # Only allow editing bookings that belong to the logged-in user
+        return Booking.objects.filter(user=self.request.user)
     
     
 class BookingCreateView(registered_users_only, generic.CreateView):
