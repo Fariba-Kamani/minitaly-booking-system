@@ -1,69 +1,151 @@
-{% extends 'base.html' %}
-
-{% block title %}My Bookings - Minitaly{% endblock %}
-
+{% extends 'base.html' %} {% block title %}My Bookings - Minitaly{% endblock %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">My Bookings</h2>
+  <h2 class="mb-4">My Bookings</h2>
 
-    <div class="accordion" id="bookingAccordion">
-        <!-- Upcoming Bookings -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingUpcoming">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseUpcoming" aria-expanded="true" aria-controls="collapseUpcoming">
-                    Upcoming Bookings
+  <div class="accordion" id="bookingAccordion">
+    <!-- Upcoming Bookings -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingUpcoming">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseUpcoming"
+          aria-expanded="true"
+          aria-controls="collapseUpcoming"
+        >
+          Upcoming Bookings
+        </button>
+      </h2>
+      <div
+        id="collapseUpcoming"
+        class="accordion-collapse collapse show"
+        aria-labelledby="headingUpcoming"
+        data-bs-parent="#bookingAccordion"
+      >
+        <div class="accordion-body">
+          {% if upcoming_bookings %}
+          <ul class="list-group">
+            {% for booking in upcoming_bookings %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <div>
+                {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests }} guests
+              </div>
+              <div>
+                <a
+                  href="{% url 'booking_edit' booking.pk %}"
+                  class="btn btn-sm btn-outline-secondary"
+                  >Edit</a
+                >
+                <!-- Cancel Button (opens modal) -->
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#cancelModal{{ booking.id }}"
+                >
+                  Cancel
                 </button>
-            </h2>
-            <div id="collapseUpcoming" class="accordion-collapse collapse show" aria-labelledby="headingUpcoming"
-                data-bs-parent="#bookingAccordion">
-                <div class="accordion-body">
-                    {% if upcoming_bookings %}
-                        <ul class="list-group">
-                            {% for booking in upcoming_bookings %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests }} guests
-                                    </div>
-                                    <div>
-                                        <a href="{% url 'booking_edit' booking.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                        <a href="{% url 'booking_delete' booking.pk %}" class="btn btn-sm btn-outline-danger">Cancel</a>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No upcoming bookings.</p>
-                    {% endif %}
+              </div>
+            </li>
+            <!-- Cancel Modal -->
+            <div
+              class="modal fade"
+              id="cancelModal{{ booking.id }}"
+              tabindex="-1"
+              aria-labelledby="cancelModalLabel{{ booking.id }}"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <form
+                    method="post"
+                    action="{% url 'booking_delete' booking.pk %}"
+                  >
+                    {% csrf_token %}
+                    <div class="modal-header">
+                      <h5
+                        class="modal-title"
+                        id="cancelModalLabel{{ booking.id }}"
+                      >
+                        Confirm Cancellation
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to cancel your booking on
+                      <strong>{{ booking.date }}</strong> at
+                      <strong>{{ booking.time }}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        No, Keep
+                      </button>
+                      <button type="submit" class="btn btn-danger">
+                        Yes, Cancel
+                      </button>
+                    </div>
+                  </form>
                 </div>
+              </div>
             </div>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>No upcoming bookings.</p>
+          {% endif %}
         </div>
-
-        <!-- Booking History -->
-        <div class="accordion-item mt-3">
-            <h2 class="accordion-header" id="headingHistory">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
-                    Booking History
-                </button>
-            </h2>
-            <div id="collapseHistory" class="accordion-collapse collapse" aria-labelledby="headingHistory"
-                data-bs-parent="#bookingAccordion">
-                <div class="accordion-body">
-                    {% if past_bookings %}
-                        <ul class="list-group">
-                            {% for booking in past_bookings %}
-                                <li class="list-group-item">
-                                    {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests }} guests
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No past bookings.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <!-- Booking History -->
+    <div class="accordion-item mt-3">
+      <h2 class="accordion-header" id="headingHistory">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseHistory"
+          aria-expanded="false"
+          aria-controls="collapseHistory"
+        >
+          Booking History
+        </button>
+      </h2>
+      <div
+        id="collapseHistory"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingHistory"
+        data-bs-parent="#bookingAccordion"
+      >
+        <div class="accordion-body">
+          {% if past_bookings %}
+          <ul class="list-group">
+            {% for booking in past_bookings %}
+            <li class="list-group-item">
+              {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests
+              }} guests
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>No past bookings.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

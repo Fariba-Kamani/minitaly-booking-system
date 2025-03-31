@@ -3,7 +3,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.utils import timezone
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from .models import Booking
 from .forms import BookingForm
 
@@ -40,6 +40,16 @@ class BookingUpdateView(registered_users_only, UpdateView):
 
     def get_queryset(self):
         # Only allow editing bookings that belong to the logged-in user
+        return Booking.objects.filter(user=self.request.user)
+    
+
+class BookingDeleteView(registered_users_only, DeleteView):
+    model = Booking
+    template_name = 'bookings/booking_confirm_delete.html'
+    success_url = reverse_lazy('booking_list')
+
+    def get_queryset(self):
+        # Only allow users to cancel their own bookings
         return Booking.objects.filter(user=self.request.user)
     
     
