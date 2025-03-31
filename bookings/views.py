@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
+from django.utils import timezone
 from .models import Booking
 from .forms import BookingForm
 
