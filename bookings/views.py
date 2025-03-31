@@ -13,8 +13,24 @@ class BookingListView(generic.ListView):
     model = Booking
     template_name = 'bookings/booking_list.html'
     context_object_name = 'bookings'
-    ordering = ['-date', '-time']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now().date()
 
+        context['upcoming_bookings'] = Booking.objects.filter(
+            user=self.request.user,
+            date__gte=now
+        ).order_by('date', 'time')
+
+        context['past_bookings'] = Booking.objects.filter(
+            user=self.request.user,
+            date__lt=now
+        ).order_by('-date', '-time')
+
+        return context
+    
+    
 class BookingCreateView(registered_users_only, generic.CreateView):
     model = Booking
     form_class = BookingForm

@@ -4,21 +4,66 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">All Bookings</h2>
+    <h2 class="mb-4">My Bookings</h2>
 
-    {% if bookings %}
-        <ul class="list-group">
-            {% for booking in bookings %}
-                <li class="list-group-item">
-                    {{ booking.user.username }} booked on {{ booking.date }} at {{ booking.time }}
-                    for {{ booking.num_guests }} guests
-                    {% if booking.is_cancelled %}<strong class="text-danger">(Cancelled)</strong>{% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No bookings yet.</p>
-    {% endif %}
+    <div class="accordion" id="bookingAccordion">
+        <!-- Upcoming Bookings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingUpcoming">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseUpcoming" aria-expanded="true" aria-controls="collapseUpcoming">
+                    Upcoming Bookings
+                </button>
+            </h2>
+            <div id="collapseUpcoming" class="accordion-collapse collapse show" aria-labelledby="headingUpcoming"
+                data-bs-parent="#bookingAccordion">
+                <div class="accordion-body">
+                    {% if upcoming_bookings %}
+                        <ul class="list-group">
+                            {% for booking in upcoming_bookings %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests }} guests
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'booking_edit' booking.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <a href="{% url 'booking_delete' booking.pk %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No upcoming bookings.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking History -->
+        <div class="accordion-item mt-3">
+            <h2 class="accordion-header" id="headingHistory">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
+                    Booking History
+                </button>
+            </h2>
+            <div id="collapseHistory" class="accordion-collapse collapse" aria-labelledby="headingHistory"
+                data-bs-parent="#bookingAccordion">
+                <div class="accordion-body">
+                    {% if past_bookings %}
+                        <ul class="list-group">
+                            {% for booking in past_bookings %}
+                                <li class="list-group-item">
+                                    {{ booking.date }} at {{ booking.time }} for {{ booking.num_guests }} guests
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No past bookings.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
-
