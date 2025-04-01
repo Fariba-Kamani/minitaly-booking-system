@@ -1,15 +1,82 @@
-{% extends 'base.html' %}
-
-{% block title %}Book a Table{% endblock %}
+{% extends "base.html" %}
+{% block title %}Book a Table - Minitaly{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Book a Table</h2>
+  <h2 class="mb-4">Book a Table</h2>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Confirm Booking</button>
-    </form>
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- Date -->
+    <div class="mb-3">
+      <label for="id_date" class="form-label">Select Date</label>
+      <input type="date" name="date" class="form-control" id="id_date" required>
+    </div>
+
+    <!-- Guests -->
+    <div class="mb-3">
+      <label for="id_num_guests" class="form-label">Number of Guests</label>
+      <select name="num_guests" class="form-select" id="id_num_guests" required>
+        <option value="" selected disabled>Select guests</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+
+    <!-- Time -->
+    <div class="mb-3">
+      <label for="id_time" class="form-label">Available Time</label>
+      <select name="time" class="form-select" id="id_time" required>
+        <option value="" selected disabled>Select a time</option>
+        <!-- Options will be filled by JS -->
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+  </form>
 </div>
+
+<!-- JavaScript to load available slots -->
+<script>
+  const dateField = document.getElementById('id_date');
+  const guestField = document.getElementById('id_num_guests');
+  const timeField = document.getElementById('id_time');
+
+  function loadAvailableSlots() {
+    const date = dateField.value;
+    const guests = guestField.value;
+
+    if (!date || !guests) return;
+
+    fetch(`/bookings/api/available-slots/?date=${date}&guests=${guests}`)
+      .then(res => res.json())
+      .then(data => {
+        timeField.innerHTML = '';
+        if (data.slots) {
+          data.slots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.time;
+            option.textContent = slot.time;
+            if (!slot.available) {
+              option.disabled = true;
+              option.textContent += " (Full)";
+            }
+            timeField.appendChild(option);
+          });
+        }
+      });
+  }
+
+  dateField.addEventListener('change', loadAvailableSlots);
+  guestField.addEventListener('change', loadAvailableSlots);
+</script>
 {% endblock %}

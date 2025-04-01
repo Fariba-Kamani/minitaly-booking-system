@@ -6,8 +6,10 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import UpdateView, DeleteView
+from django.http import JsonResponse
 from .models import Booking
 from .forms import BookingForm
+from .utils import get_available_time_slots
 
 def home(request):
     return render(request, 'index.html')
@@ -68,3 +70,22 @@ class BookingCreateView(registered_users_only, generic.CreateView):
         form.instance.user = self.request.user
         messages.success(self.request, "Your booking has been successfully created!")
         return super().form_valid(form)
+
+
+def available_slots_api(request):
+    date_str = request.GET.get('date')
+    guests = request.GET.get('guests')
+
+    if not date_str or not guests:
+        return JsonResponse({'error': 'Missing parameters'}, status=400)
+
+    from datetime import datetime
+    try:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        guests = int(guests)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid input'}, status=400)
+
+    slots = get_available_time_slots(selected_date, guests)
+
+    return JsonResponse({'slots': slots})
