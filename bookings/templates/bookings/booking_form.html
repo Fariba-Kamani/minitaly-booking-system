@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Book a Table - Minitaly{% endblock %}
 
 {% block content %}
@@ -11,24 +12,28 @@
     <!-- Date -->
     <div class="mb-3">
       <label for="id_date" class="form-label">Select Date</label>
-      <input type="date" name="date" class="form-control" id="id_date" required>
+      <input 
+        type="date" 
+        name="date" 
+        class="form-control" 
+        id="id_date" 
+        value="{{ form.date.value|date:'Y-m-d' }}" 
+        required
+      >
     </div>
 
     <!-- Guests -->
     <div class="mb-3">
       <label for="id_num_guests" class="form-label">Number of Guests</label>
       <select name="num_guests" class="form-select" id="id_num_guests" required>
-        <option value="" selected disabled>Select guests</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
+        <option value="" disabled {% if not form.num_guests.value %}selected{% endif %}>Select guests</option>
+        {% for i in "123456789A" %}
+          {% with val=forloop.counter %}
+            <option value="{{ val }}" {% if form.num_guests.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>
+              {{ val }}
+            </option>
+          {% endwith %}
+        {% endfor %}
       </select>
     </div>
 
@@ -37,7 +42,7 @@
       <label for="id_time" class="form-label">Available Time</label>
       <select name="time" class="form-select" id="id_time" required>
         <option value="" selected disabled>Select a time</option>
-        <!-- Options will be filled by JS -->
+        <!-- Options will be dynamically loaded by JS -->
       </select>
     </div>
 
@@ -45,8 +50,12 @@
   </form>
 </div>
 
-{% load static %}
-<script src="{% static 'bookings/js/booking_slots.js' %}"></script>
-
+<!-- JavaScript variables with initial values from form -->
+<script>
+  const initialDate = "{{ form.date.value|date:'Y-m-d'|default:'' }}";
+  const initialGuests = "{{ form.num_guests.value|default:'' }}";
+  const initialTime = "{{ form.time.value|default:'' }}";
+</script>
+<script src="{% static 'bookings/js/booking_slots.js' %}" defer></script>
 
 {% endblock %}
