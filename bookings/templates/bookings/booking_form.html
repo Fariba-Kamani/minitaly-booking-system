@@ -45,38 +45,8 @@
   </form>
 </div>
 
-<!-- JavaScript to load available slots -->
-<script>
-  const dateField = document.getElementById('id_date');
-  const guestField = document.getElementById('id_num_guests');
-  const timeField = document.getElementById('id_time');
+{% load static %}
+<script src="{% static 'bookings/js/booking_slots.js' %}"></script>
 
-  function loadAvailableSlots() {
-    const date = dateField.value;
-    const guests = guestField.value;
 
-    if (!date || !guests) return;
-
-    fetch(`/bookings/api/available-slots/?date=${date}&guests=${guests}`)
-      .then(res => res.json())
-      .then(data => {
-        timeField.innerHTML = '';
-        if (data.slots) {
-          data.slots.forEach(slot => {
-            const option = document.createElement('option');
-            option.value = slot.time;
-            option.textContent = slot.time;
-            if (!slot.available) {
-              option.disabled = true;
-              option.textContent += " (Full)";
-            }
-            timeField.appendChild(option);
-          });
-        }
-      });
-  }
-
-  dateField.addEventListener('change', loadAvailableSlots);
-  guestField.addEventListener('change', loadAvailableSlots);
-</script>
 {% endblock %}
