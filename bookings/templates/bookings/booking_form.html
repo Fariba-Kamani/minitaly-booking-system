@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Book a Table</h2>
+  <h2 class="mb-4">{% if form.instance.pk %}Edit Your Booking{% else %}Book a Table{% endif %}</h2>
 
   <form method="post">
     {% csrf_token %}
@@ -45,8 +45,18 @@
         <!-- Options will be dynamically loaded by JS -->
       </select>
     </div>
+    <!-- Special Requests -->
+    <div class="mb-3">
+    <label for="id_special_request" class="form-label">Special Requests</label>
+    <textarea 
+      name="special_request" 
+      class="form-control" 
+      id="id_special_request"
+      rows="3"
+    >{{ form.special_request.value|default_if_none:"" }}</textarea>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update Booking{% else %}Confirm Booking{% endif %}</button>
   </form>
 </div>
 
