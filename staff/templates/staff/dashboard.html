@@ -10,7 +10,15 @@
       <input type="date" name="date" class="form-control" placeholder="Filter by date" value="{{ request.GET.date }}">
     </div>
     <div class="col-md-3">
-      <input type="time" name="time" class="form-control" placeholder="Filter by time" value="{{ request.GET.time }}">
+        <select name="time" class="form-control">
+            <option value="" {% if not request.GET.time %}selected{% endif %}>All times</option>
+            <option value="17:00:00" {% if request.GET.time == "17:00:00" %}selected{% endif %}>17:00:00</option>
+            <option value="18:00:00" {% if request.GET.time == "18:00:00" %}selected{% endif %}>18:00:00</option>
+            <option value="19:00:00" {% if request.GET.time == "19:00:00" %}selected{% endif %}>19:00:00</option>
+            <option value="20:00:00" {% if request.GET.time == "20:00:00" %}selected{% endif %}>20:00:00</option>
+            <option value="21:00:00" {% if request.GET.time == "21:00:00" %}selected{% endif %}>21:00:00</option>
+            <option value="22:00:00" {% if request.GET.time == "22:00:00" %}selected{% endif %}>22:00:00</option>
+          </select>
     </div>
     <div class="col-md-4">
       <input type="text" name="customer" class="form-control" placeholder="Filter by customer" value="{{ request.GET.customer }}">
@@ -36,8 +44,8 @@
         {% for booking in bookings %}
         <tr>
           <td>{{ booking.user.username }}</td>
-          <td>{{ booking.date }}</td>
-          <td>{{ booking.time }}</td>
+          <td>{{ booking.date|date:"Y-m-d" }}</td>
+          <td>{{ booking.time|time:"H:i:s" }}</td>
           <td>{{ booking.num_guests }}</td>
           <td>{{ booking.special_request|default:"—" }}</td>
           <td>
