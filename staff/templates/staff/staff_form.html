@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit Booking - Staff{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Edit Booking for: <strong>{{ form.instance.user.username }}</strong></h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- Date -->
+    <div class="mb-3">
+        <label for="id_date" class="form-label">Select Date</label>
+        <input 
+        type="date" 
+        name="date" 
+        class="form-control" 
+        id="id_date" 
+        value="{% if form.date.value %}{{ form.date.value|date:'Y-m-d' }}{% elif form.initial.date %}{{ form.initial.date|date:'Y-m-d' }}{% endif %}" 
+        required
+        >
+    </div>
+
+    <!-- Guests -->
+    <div class="mb-3">
+      <label for="id_num_guests" class="form-label">Number of Guests</label>
+      <select name="num_guests" class="form-select" id="id_num_guests" required>
+        <option value="" disabled {% if not form.num_guests.value %}selected{% endif %}>Select guests</option>
+        {% for i in "123456789A" %}
+          {% with val=forloop.counter %}
+            <option value="{{ val }}" {% if form.num_guests.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>
+              {{ val }}
+            </option>
+          {% endwith %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Time -->
+    <div class="mb-3">
+      <label for="id_time" class="form-label">Available Time</label>
+      <select name="time" class="form-select" id="id_time" required>
+        <option value="" disabled {% if not form.time.value %}selected{% endif %}>Select a time</option>
+        {% if form.time.value %}
+            <option value="{{ form.time.value }}" selected>{{ form.time.value }}</option>
+        {% endif %}
+      </select>
+    </div>
+
+    <!-- Special Requests -->
+    <div class="mb-3">
+      <label for="id_special_request" class="form-label">Special Requests</label>
+      <textarea 
+        name="special_request" 
+        class="form-control" 
+        id="id_special_request"
+        rows="3"
+      >{{ form.special_request.value|default_if_none:"" }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update Booking</button>
+  </form>
+</div>
+
+<script>
+    const initialDate = "{% if form.date.value %}{{ form.date.value|date:'Y-m-d' }}{% elif form.initial.date %}{{ form.initial.date|date:'Y-m-d' }}{% endif %}";
+    const initialGuests = "{{ form.num_guests.value|default_if_none:'' }}";
+    const initialTime = "{{ form.time.value|time:'H:i:s'|default:'' }}";
+</script>
+<script src="{% static 'bookings/js/booking_slots.js' %}" defer></script>
+
+{% endblock %}

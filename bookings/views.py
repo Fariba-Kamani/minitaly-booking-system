@@ -43,7 +43,6 @@ class BookingUpdateView(registered_users_only, UpdateView):
     success_url = reverse_lazy('booking_list')
 
     def get_queryset(self):
-        # Only allow editing bookings that belong to the logged-in user
         return Booking.objects.filter(user=self.request.user)
     
     def form_valid(self, form):

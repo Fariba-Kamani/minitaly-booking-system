@@ -2,6 +2,16 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 <div class="container mt-5">
   <h2 class="mb-4">Admin Management Dashboard</h2>
 
@@ -49,8 +59,8 @@
           <td>{{ booking.num_guests }}</td>
           <td>{{ booking.special_request|default:"—" }}</td>
           <td>
-            <a href="{% url 'booking_edit' booking.pk %}" class="btn btn-sm btn-warning">Edit</a>
-            <a href="{% url 'booking_delete' booking.pk %}" class="btn btn-sm btn-danger">Cancel</a>
+            <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'staff_booking_delete' booking.pk %}" class="btn btn-sm btn-danger">Cancel</a>
           </td>
         </tr>
         {% endfor %}
