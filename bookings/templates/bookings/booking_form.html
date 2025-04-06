@@ -11,17 +11,16 @@
 
     <!-- Date -->
     <div class="mb-3">
-      <label for="id_date" class="form-label">Select Date</label>
-      <input 
+        <label for="id_date" class="form-label">Select Date</label>
+        <input 
         type="date" 
         name="date" 
         class="form-control" 
         id="id_date" 
-        value="{{ form.date.value|date:'Y-m-d' }}" 
+        value="{% if form.date.value %}{{ form.date.value|date:'Y-m-d' }}{% elif form.initial.date %}{{ form.initial.date|date:'Y-m-d' }}{% endif %}" 
         required
-      >
+        >
     </div>
-
     <!-- Guests -->
     <div class="mb-3">
       <label for="id_num_guests" class="form-label">Number of Guests</label>
@@ -41,8 +40,10 @@
     <div class="mb-3">
       <label for="id_time" class="form-label">Available Time</label>
       <select name="time" class="form-select" id="id_time" required>
-        <option value="" selected disabled>Select a time</option>
-        <!-- Options will be dynamically loaded by JS -->
+        <option value="" disabled {% if not form.time.value %}selected{% endif %}>Select a time</option>
+        {% if form.time.value %}
+            <option value="{{ form.time.value }}" selected>{{ form.time.value }}</option>
+        {% endif %}
       </select>
     </div>
     <!-- Special Requests -->
@@ -60,11 +61,10 @@
   </form>
 </div>
 
-<!-- JavaScript variables with initial values from form -->
 <script>
-  const initialDate = "{{ form.date.value|date:'Y-m-d'|default:'' }}";
-  const initialGuests = "{{ form.num_guests.value|default:'' }}";
-  const initialTime = "{{ form.time.value|default:'' }}";
+    const initialDate = "{% if form.date.value %}{{ form.date.value|date:'Y-m-d' }}{% elif form.initial.date %}{{ form.initial.date|date:'Y-m-d' }}{% endif %}";
+    const initialGuests = "{{ form.num_guests.value|default_if_none:'' }}";
+    const initialTime = "{{ form.time.value|time:'H:i:s'|default:'' }}";
 </script>
 <script src="{% static 'bookings/js/booking_slots.js' %}" defer></script>
 

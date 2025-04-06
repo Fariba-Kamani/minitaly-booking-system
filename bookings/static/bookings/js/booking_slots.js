@@ -2,6 +2,16 @@ const dateField = document.getElementById('id_date');
 const guestField = document.getElementById('id_num_guests');
 const timeField = document.getElementById('id_time');
 
+// Normalize to HH:MM:SS format if needed
+function normalizeTimeFormat(timeStr) {
+  if (timeStr && timeStr.length === 5) {
+    return timeStr + ':00'; // Convert "19:00" → "19:00:00"
+  }
+  return timeStr;
+}
+
+const normalizedInitialTime = normalizeTimeFormat(initialTime);
+
 function loadAvailableSlots() {
   const date = dateField.value;
   const guests = guestField.value;
@@ -13,35 +23,42 @@ function loadAvailableSlots() {
     .then(data => {
       timeField.innerHTML = '';
       let anyAvailable = false;
+      let timeMatched = false;
 
       data.slots.forEach(slot => {
         const option = document.createElement('option');
         option.value = slot.time;
         option.textContent = slot.time;
 
-        console.log("slot.time:", slot.time, "initialTime:", initialTime);
-
-        if (!slot.available && slot.time !== initialTime) {
+        if (!slot.available && slot.time !== normalizedInitialTime) {
           option.disabled = true;
           option.textContent += " (Full)";
         } else {
           anyAvailable = true;
         }
 
-        if (slot.time === initialTime) {
-            option.selected = true;
-            timeMatched = true;
-          }
+        if (slot.time === normalizedInitialTime) {
+          option.selected = true;
+          timeMatched = true;
+        }
 
         timeField.appendChild(option);
       });
 
-      if (!anyAvailable && !initialTime) {
+      if (!anyAvailable && !normalizedInitialTime) {
         const noOption = document.createElement('option');
         noOption.textContent = "No available time slots";
         noOption.disabled = true;
         noOption.selected = true;
         timeField.appendChild(noOption);
+      }
+
+      if (!timeMatched && normalizedInitialTime) {
+        const originalOption = document.createElement('option');
+        originalOption.value = normalizedInitialTime;
+        originalOption.textContent = normalizedInitialTime;
+        originalOption.selected = true;
+        timeField.appendChild(originalOption);
       }
     });
 }
@@ -50,44 +67,17 @@ function loadAvailableSlots() {
 dateField.addEventListener('change', loadAvailableSlots);
 guestField.addEventListener('change', loadAvailableSlots);
 
-// 👇 This block is for EDIT VIEW pre-filling
+// 👇 On page load, ensure fields are populated and fetch correct slots
 document.addEventListener('DOMContentLoaded', () => {
-  if (initialDate && initialGuests) {
+  if (initialDate) {
     dateField.value = initialDate;
+  }
+
+  if (initialGuests) {
     guestField.value = initialGuests;
+  }
 
-    fetch(`/bookings/api/available-slots/?date=${initialDate}&guests=${initialGuests}`)
-      .then(res => res.json())
-      .then(data => {
-        timeField.innerHTML = '';
-        let timeMatched = false;
-
-        data.slots.forEach(slot => {
-          const option = document.createElement('option');
-          option.value = slot.time;
-          option.textContent = slot.time;
-
-          if (!slot.available && slot.time !== initialTime) {
-            option.disabled = true;
-            option.textContent += " (Full)";
-          }
-
-          if (slot.time === initialTime) {
-            option.selected = true;
-            timeMatched = true;
-          }
-
-          timeField.appendChild(option);
-        });
-
-        // If the current booking time is no longer available, still show it
-        if (!timeMatched && initialTime) {
-          const originalOption = document.createElement('option');
-          originalOption.value = initialTime;
-          originalOption.textContent = `${initialTime} (Your original time)`;
-          originalOption.selected = true;
-          timeField.appendChild(originalOption);
-        }
-      });
+  if (initialDate && initialGuests) {
+    loadAvailableSlots();
   }
 });

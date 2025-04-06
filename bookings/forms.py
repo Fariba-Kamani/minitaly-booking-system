@@ -21,15 +21,22 @@ class BookingForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        date = cleaned_data.get('date')
-        time = cleaned_data.get('time')
-        if self.instance.pk:
-            # We're editing an existing booking, so exclude it from conflict checks
-            existing = Booking.objects.filter(date=date, time=time).exclude(pk=self.instance.pk)
-        else:
-            # We're creating a new booking
-            existing = Booking.objects.filter(date=date, time=time)
+        date = cleaned_data.get('date') or self.instance.date
+        time = cleaned_data.get('time') or self.instance.time
 
-        if existing.exists():
+        if self.instance.pk:
+            if (
+                self.instance.date == date and
+                self.instance.time == time and
+                self.instance.num_guests == cleaned_data.get('num_guests')
+            ):
+                return cleaned_data
+
+        conflict_qs = Booking.objects.filter(date=date, time=time)
+        if self.instance.pk:
+            conflict_qs = conflict_qs.exclude(pk=self.instance.pk)
+
+        if conflict_qs.exists():
             raise forms.ValidationError("This time slot is already booked. Please choose another.")
+
         return cleaned_data
