@@ -3,7 +3,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from datetime import date
 
@@ -43,17 +45,18 @@ class StaffBookingUpdateView(UpdateView):
     success_url = reverse_lazy('staff_dashboard')
 
     def form_valid(self, form):
-        staff_name = self.request.user.username  # ✅ define it first
+        staff_name = self.request.user.username  # define it first
         messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
         return super().form_valid(form)
 
 
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
-class StaffBookingDeleteView(DeleteView):
+class StaffBookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteView):
     model = Booking
-    template_name = 'staff/staff_confirm_delete.html'
     success_url = reverse_lazy('staff_dashboard')
+    template_name = 'staff/dashboard.html'  # Not used, modal
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "Booking cancelled successfully (by staff).")
-        return super().delete(request, *args, **kwargs)
+    success_message = "Booking cancelled successfully by staff: %(username)s."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % {'username': self.request.user.username}

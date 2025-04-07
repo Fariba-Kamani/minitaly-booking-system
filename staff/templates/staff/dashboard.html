@@ -1,73 +1,129 @@
 {% extends "base.html" %}
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Staff Dashboard - Minitaly{% endblock %}
 
 {% block content %}
-{% if messages %}
+<div class="container mt-5">
+
+  {% if messages %}
   <div class="container mt-3">
     {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     {% endfor %}
   </div>
-{% endif %}
-<div class="container mt-5">
-  <h2 class="mb-4">Admin Management Dashboard</h2>
+  {% endif %}
+  <h2 class="mb-4">Staff Booking Dashboard</h2>
 
   <form method="get" class="row g-3 mb-4">
     <div class="col-md-3">
-      <input type="date" name="date" class="form-control" placeholder="Filter by date" value="{{ request.GET.date }}">
+      <label for="date" class="form-label">Filter by Date</label>
+      <input type="date" id="date" name="date" class="form-control" value="{{ request.GET.date }}">
     </div>
+
     <div class="col-md-3">
-        <select name="time" class="form-control">
-            <option value="" {% if not request.GET.time %}selected{% endif %}>All times</option>
-            <option value="17:00:00" {% if request.GET.time == "17:00:00" %}selected{% endif %}>17:00:00</option>
-            <option value="18:00:00" {% if request.GET.time == "18:00:00" %}selected{% endif %}>18:00:00</option>
-            <option value="19:00:00" {% if request.GET.time == "19:00:00" %}selected{% endif %}>19:00:00</option>
-            <option value="20:00:00" {% if request.GET.time == "20:00:00" %}selected{% endif %}>20:00:00</option>
-            <option value="21:00:00" {% if request.GET.time == "21:00:00" %}selected{% endif %}>21:00:00</option>
-            <option value="22:00:00" {% if request.GET.time == "22:00:00" %}selected{% endif %}>22:00:00</option>
-          </select>
+      <label for="time" class="form-label">Filter by Time</label>
+      <select name="time" class="form-control">
+        <option value="" {% if not request.GET.time %}selected{% endif %}>All times</option>
+        <option value="17:00:00" {% if request.GET.time == "17:00:00" %}selected{% endif %}>17:00:00</option>
+        <option value="18:00:00" {% if request.GET.time == "18:00:00" %}selected{% endif %}>18:00:00</option>
+        <option value="19:00:00" {% if request.GET.time == "19:00:00" %}selected{% endif %}>19:00:00</option>
+        <option value="20:00:00" {% if request.GET.time == "20:00:00" %}selected{% endif %}>20:00:00</option>
+        <option value="21:00:00" {% if request.GET.time == "21:00:00" %}selected{% endif %}>21:00:00</option>
+        <option value="22:00:00" {% if request.GET.time == "22:00:00" %}selected{% endif %}>22:00:00</option>
+      </select>
     </div>
-    <div class="col-md-4">
-      <input type="text" name="customer" class="form-control" placeholder="Filter by customer" value="{{ request.GET.customer }}">
+
+    <div class="col-md-3">
+      <label for="customer" class="form-label">Filter by Customer</label>
+      <input type="text" id="customer" name="customer" class="form-control" value="{{ request.GET.customer }}">
     </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-primary w-100">Filter</button>
+
+    <div class="col-md-3 align-self-end">
+      <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
     </div>
   </form>
 
-  {% if bookings %}
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Customer</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Guests</th>
-          <th>Special Request</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for booking in bookings %}
-        <tr>
-          <td>{{ booking.user.username }}</td>
-          <td>{{ booking.date|date:"Y-m-d" }}</td>
-          <td>{{ booking.time|time:"H:i:s" }}</td>
-          <td>{{ booking.num_guests }}</td>
-          <td>{{ booking.special_request|default:"—" }}</td>
-          <td>
-            <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-warning">Edit</a>
-            <a href="{% url 'staff_booking_delete' booking.pk %}" class="btn btn-sm btn-danger">Cancel</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No bookings found for the selected criteria.</p>
-  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Guests</th>
+        <th>Request</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.user.username }}</td>
+        <td>{{ booking.date|date:"Y-m-d" }}</td>
+        <td>{{ booking.time|time:"H:i:s" }}</td>
+        <td>{{ booking.num_guests }}</td>
+        <td>{{ booking.special_request|default:"—" }}</td>
+        <td>
+          <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-warning">Edit</a>
+
+          <!-- Cancel button with modal trigger -->
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#cancelModal{{ booking.id }}"
+          >
+            Cancel
+          </button>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="cancelModal{{ booking.id }}"
+            tabindex="-1"
+            aria-labelledby="cancelModalLabel{{ booking.id }}"
+            aria-describedby="cancelModalBody{{ booking.id }}"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form method="post" action="{% url 'staff_booking_delete' booking.pk %}">
+                  {% csrf_token %}
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel{{ booking.id }}">
+                      Confirm Cancellation
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to cancel the booking for
+                    <strong>{{ booking.user.username }}</strong> on
+                    <strong>{{ booking.date }}</strong> at
+                    <strong>{{ booking.time }}</strong>?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                      No, Keep
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                      Yes, Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
