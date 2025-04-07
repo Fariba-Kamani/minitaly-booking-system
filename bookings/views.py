@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import UpdateView, DeleteView
 from django.http import JsonResponse
+from django.core.mail import send_mail
 from .models import Booking
 from .forms import BookingForm
 from .utils import get_available_time_slots
@@ -67,8 +68,27 @@ class BookingCreateView(registered_users_only, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        response = super().form_valid(form)
+
+        # Send confirmation email
+        send_mail(
+            subject="Your booking is confirmed - Minitaly",
+            message=f"Dear {self.request.user.first_name or self.request.user.username},\n\n"
+                    f"Thank you for booking with Minitaly!\n\n"
+                    f"Here are your booking details:\n"
+                    f"Date: {form.instance.date}\n"
+                    f"Time: {form.instance.time.strftime('%H:%M')}\n"
+                    f"Guests: {form.instance.num_guests}\n"
+                    f"Special Request: {form.instance.special_request or 'None'}\n\n"
+                    f"We look forward to seeing you!\n\n"
+                    f"Best regards,\nMinitaly",
+            from_email=None,
+            recipient_list=[self.request.user.email],
+            fail_silently=False,
+        )
+
         messages.success(self.request, "Your booking has been successfully created!")
-        return super().form_valid(form)
+        return response
 
 
 def available_slots_api(request):
