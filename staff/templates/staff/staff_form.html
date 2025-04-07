@@ -20,6 +20,11 @@
         value="{% if form.date.value %}{{ form.date.value|date:'Y-m-d' }}{% elif form.initial.date %}{{ form.initial.date|date:'Y-m-d' }}{% endif %}" 
         required
         >
+        {% if form.date.errors %}
+            <div class="text-danger mt-1">
+            {{ form.date.errors.0 }}
+            </div>
+        {% endif %}
     </div>
 
     <!-- Guests -->
@@ -70,6 +75,11 @@
         Send me a reminder email 24 hours before my booking
         </label>
     </div>
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {{ form.non_field_errors }}
+    </div>
+    {% endif %}
 
     <button type="submit" class="btn btn-success">Update Booking</button>
   </form>

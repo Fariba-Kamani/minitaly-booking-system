@@ -1,6 +1,7 @@
 from django import forms
 from .models import Booking
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -10,33 +11,38 @@ class BookingForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
-    
-    def prevent_past_dates(self):
-        date = self.cleaned_data['date']
-        if date < timezone.now().date():
-            raise forms.ValidationError("You can't book a table in the past.")
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if date and date < timezone.now().date():
+            raise ValidationError("You can't book a table in the past.")
         return date
-    # Django expects the method to be called `clean_<fieldname>`
-    clean_date = prevent_past_dates
 
     def clean(self):
         cleaned_data = super().clean()
-        date = cleaned_data.get('date') or self.instance.date
-        time = cleaned_data.get('time') or self.instance.time
+        date = cleaned_data.get('date')
+        time = cleaned_data.get('time')
+        num_guests = cleaned_data.get('num_guests')
 
+        if not date or not time:
+            return cleaned_data  # Let field-level errors handle missing values
+
+        # Editing logic — skip conflict check if unchanged
         if self.instance.pk:
-            if (
+            same_booking = (
                 self.instance.date == date and
                 self.instance.time == time and
-                self.instance.num_guests == cleaned_data.get('num_guests')
-            ):
+                self.instance.num_guests == num_guests
+            )
+            if same_booking:
                 return cleaned_data
 
-        conflict_qs = Booking.objects.filter(date=date, time=time)
+        # Conflict check
+        conflicts = Booking.objects.filter(date=date, time=time, is_cancelled=False)
         if self.instance.pk:
-            conflict_qs = conflict_qs.exclude(pk=self.instance.pk)
+            conflicts = conflicts.exclude(pk=self.instance.pk)
 
-        if conflict_qs.exists():
-            raise forms.ValidationError("This time slot is already booked. Please choose another.")
+        if conflicts.exists():
+            raise ValidationError("This time slot is already booked. Please choose another.")
 
         return cleaned_data
