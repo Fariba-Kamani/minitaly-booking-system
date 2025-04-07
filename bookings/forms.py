@@ -5,7 +5,7 @@ from django.utils import timezone
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['date', 'time', 'num_guests', 'special_request']
+        fields = ['date', 'time', 'num_guests', 'special_request', 'send_reminder']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
