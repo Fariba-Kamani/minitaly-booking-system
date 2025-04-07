@@ -1,13 +1,10 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
-from django.db.models import Q
+from django.core.mail import send_mail
 from datetime import date
 
 from bookings.models import Booking
@@ -23,7 +20,6 @@ class BookingDashboardView(ListView):
     def get_queryset(self):
         queryset = Booking.objects.filter(date__gte=date.today()).order_by('date', 'time')
 
-        # Get query parameters
         selected_date = self.request.GET.get('date')
         selected_time = self.request.GET.get('time')
         customer = self.request.GET.get('customer')
@@ -46,29 +42,38 @@ class StaffBookingUpdateView(UpdateView):
     success_url = reverse_lazy('staff_dashboard')
 
     def form_valid(self, form):
-        staff_name = self.request.user.username  # define it first
+        staff_name = self.request.user.username
         messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
         return super().form_valid(form)
 
 
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
-class StaffBookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteView):
+class StaffBookingDeleteView(DeleteView):
     model = Booking
     success_url = reverse_lazy('staff_dashboard')
-    template_name = 'staff/dashboard.html'  # Not used, modal
-
-    success_message = "Booking cancelled successfully by staff: %(username)s."
+    template_name = 'staff/dashboard.html'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.is_cancelled = True
         self.object.cancellation_reason = request.POST.get("cancellation_reason", "")
         self.object.save()
+
+        # Send email
+        send_mail(
+            subject='Your booking has been cancelled',
+            message=f"Dear {self.object.user.first_name or self.object.user.username},\n\n"
+                    f"Your booking on {self.object.date} at {self.object.time.strftime('%H:%M')} has been cancelled.\n"
+                    f"Reason: {self.object.cancellation_reason or 'No reason provided.'}\n\n"
+                    f"If this was a mistake, please contact the restaurant.\n\n"
+                    f"Best regards,\nMinitaly",
+            from_email=None,  # Uses DEFAULT_FROM_EMAIL
+            recipient_list=[self.object.user.email],
+            fail_silently=False,
+        )
+
         messages.success(
             request,
             f"Booking cancelled successfully by staff: {request.user.username}."
         )
         return redirect(self.success_url)
-
-    def get_success_message(self, cleaned_data):
-        return self.success_message % {'username': self.request.user.username}

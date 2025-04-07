@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
+from django.core.mail import send_mail
+from django.conf import settings
 from .constants import OPERATING_HOURS, TABLE_INVENTORY, MAX_GUESTS_PER_BOOKING
 from .models import Booking
 
@@ -41,3 +43,23 @@ def get_available_time_slots(date, num_guests):
         })
 
     return available_slots
+
+def send_cancellation_email(booking):
+    subject = "Your Booking Has Been Cancelled"
+    message = (
+        f"Dear {booking.user.first_name or booking.user.username},\n\n"
+        f"Your booking on {booking.date} at {booking.time} has been cancelled.\n"
+    )
+
+    if booking.cancellation_reason:
+        message += f"\nReason: {booking.cancellation_reason}\n"
+
+    message += "\nThank you for understanding.\nMinitaly Team"
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [booking.user.email],
+        fail_silently=False,
+    )
