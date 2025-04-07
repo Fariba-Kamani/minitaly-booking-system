@@ -20,6 +20,7 @@ class Booking(models.Model):
     special_request = models.TextField(blank=True, null=True)
     is_cancelled = models.BooleanField(default=False)
     cancellation_reason = models.TextField(blank=True, null=True)
+    send_reminder = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.user.username}'s booking on {self.date} at {self.time}"
