@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.db.models import Q
 from datetime import date
 
@@ -57,6 +58,17 @@ class StaffBookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteV
     template_name = 'staff/dashboard.html'  # Not used, modal
 
     success_message = "Booking cancelled successfully by staff: %(username)s."
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_cancelled = True
+        self.object.cancellation_reason = request.POST.get("cancellation_reason", "")
+        self.object.save()
+        messages.success(
+            request,
+            f"Booking cancelled successfully by staff: {request.user.username}."
+        )
+        return redirect(self.success_url)
 
     def get_success_message(self, cleaned_data):
         return self.success_message % {'username': self.request.user.username}
