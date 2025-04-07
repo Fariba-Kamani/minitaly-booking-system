@@ -18,7 +18,10 @@ class BookingDashboardView(ListView):
     context_object_name = 'bookings'
 
     def get_queryset(self):
-        queryset = Booking.objects.filter(date__gte=date.today()).order_by('date', 'time')
+        queryset = Booking.objects.filter(
+        date__gte=date.today(),
+        is_cancelled=False  # exclude cancelled bookings
+        ).order_by('date', 'time')
 
         selected_date = self.request.GET.get('date')
         selected_time = self.request.GET.get('time')
