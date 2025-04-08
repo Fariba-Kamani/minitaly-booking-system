@@ -60,3 +60,10 @@ class BookingForm(forms.ModelForm):
             raise ValidationError("This time slot is already booked. Please choose another.")
 
         return cleaned_data
+
+
+class StaffBookingForm(BookingForm):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), label="Customer")
+
+    class Meta(BookingForm.Meta):
+        fields = ['user'] + BookingForm.Meta.fields

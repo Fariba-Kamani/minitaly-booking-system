@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -8,7 +9,7 @@ from django.core.mail import send_mail
 from datetime import date
 
 from bookings.models import Booking
-from bookings.forms import BookingForm
+from bookings.forms import BookingForm, StaffBookingForm
 
 # Admin check
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
@@ -86,3 +87,15 @@ class StaffBookingDeleteView(DeleteView):
             f"Booking cancelled successfully by staff: {request.user.username}."
         )
         return redirect(self.success_url)
+    
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
+class StaffBookingCreateView(CreateView):
+    model = Booking
+    form_class = StaffBookingForm
+    template_name = 'staff/staff_form.html'
+    success_url = reverse_lazy('staff_dashboard')
+
+    def form_valid(self, form):
+        staff_name = self.request.user.username
+        messages.success(self.request, f"Booking created successfully by staff: {staff_name}.")
+        return super().form_valid(form)
