@@ -41,7 +41,7 @@ class BookingDashboardView(ListView):
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class StaffBookingUpdateView(UpdateView):
     model = Booking
-    form_class = BookingForm
+    form_class = StaffBookingForm
     template_name = 'staff/staff_form.html'
     success_url = reverse_lazy('staff_dashboard')
 
@@ -95,7 +95,14 @@ class StaffBookingCreateView(CreateView):
     template_name = 'staff/staff_form.html'
     success_url = reverse_lazy('staff_dashboard')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
+        customer_name = form.cleaned_data['user'].username
         staff_name = self.request.user.username
-        messages.success(self.request, f"Booking created successfully by staff: {staff_name}.")
+        messages.success(self.request, f"Booking created successfully for {customer_name} by staff: {staff_name}.")
         return super().form_valid(form)
+    
