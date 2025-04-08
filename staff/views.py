@@ -44,7 +44,13 @@ class StaffBookingUpdateView(UpdateView):
     template_name = 'staff/staff_form.html'
     success_url = reverse_lazy('staff_dashboard')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request  # pass the request into the form
+        return kwargs
+
     def form_valid(self, form):
+        form.instance.user = self.get_object().user
         staff_name = self.request.user.username
         messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
         return super().form_valid(form)

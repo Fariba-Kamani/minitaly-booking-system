@@ -2,15 +2,29 @@ from django import forms
 from .models import Booking
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 class BookingForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        queryset=User.objects.filter(is_staff=False),
+        required=False,  # Optional for regular users (auto-assigned), required for staff
+        label="Customer",
+        help_text="Select a customer (only visible to staff)."
+    )
     class Meta:
         model = Booking
-        fields = ['date', 'time', 'num_guests', 'special_request', 'send_reminder']
+        fields = ['user', 'date', 'time', 'num_guests', 'special_request', 'send_reminder']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # Capture request for role checks
+        super().__init__(*args, **kwargs)
+
+        if not self.request or not self.request.user.is_staff:
+            self.fields.pop('user')  # Hide the field for regular users
 
     def clean_date(self):
         date = self.cleaned_data.get('date')
