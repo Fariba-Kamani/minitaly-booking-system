@@ -41,7 +41,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <span class="brand">m<span class="red-o">i</span>n<span class="thin">Italy</span></span>
+          <span class="brand"
+            >m<span class="red-o">i</span>n<span class="thin">Italy</span></span
+          >
         </a>
         <button
           class="navbar-toggler"
@@ -64,18 +66,13 @@
                 >Home</a
               >
             </li>
+
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == logout_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'account_logout' %}"
+                href="{{ logout_url }}"
                 >Logout</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'booking_list' %}"
-                >My Bookings</a
               >
             </li>
 
@@ -92,6 +89,11 @@
             </li>
             {% else %}
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking_list' %}"
+                >My Bookings</a
+              >
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'booking_create' %}"
                 >Book a Table</a
               >
@@ -100,21 +102,20 @@
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == signup_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'account_signup' %}"
+                href="{{ signup_url }}"
                 >Register</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == login_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'account_login' %}"
+                href="{{ login_url }}"
                 >Login</a
               >
             </li>
             {% endif %}
           </ul>
+
           <span class="navbar-text text-muted"> bar & restaurant </span>
         </div>
       </div>
