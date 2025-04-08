@@ -4,10 +4,24 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Edit Booking for: <strong>{{ form.instance.user.username }}</strong></h2>
+    <h2 class="mb-4">
+        {% if form.instance.pk %}
+          Edit Booking
+        {% else %}
+          Create Booking for Customer
+        {% endif %}
+      </h2>
 
   <form method="post">
     {% csrf_token %}
+
+    {% if user.is_staff %}
+      <!-- Customer selection dropdown -->
+      <div class="mb-3">
+        <label for="id_user" class="form-label">Customer</label>
+        {{ form.user }}
+      </div>
+    {% endif %}
 
     <!-- Date -->
     <div class="mb-3">
