@@ -49,9 +49,14 @@ class StaffBookingUpdateView(UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request  # pass the request into the form
         return kwargs
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields.pop('user', None)  # Prevent staff from changing customer on edit
+        return form
 
     def form_valid(self, form):
-        form.instance.user = self.get_object().user
+        form.instance.user = self.get_object().user # Ensure user stays unchanged
         staff_name = self.request.user.username
         messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
         return super().form_valid(form)

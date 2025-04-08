@@ -16,11 +16,18 @@
     {% csrf_token %}
 
     {% if user.is_staff %}
-      <!-- Customer selection dropdown -->
-      <div class="mb-3">
-        <label for="id_user" class="form-label">Customer</label>
-        {{ form.user }}
-      </div>
+    {% if not form.instance.pk %}
+    <!-- Only show dropdown when creating a booking -->
+    <div class="mb-3">
+      <label for="id_user" class="form-label">Customer</label>
+      {{ form.user }}
+    </div>
+    {% else %}
+    <!-- Show customer name as static text when editing -->
+    <div class="mb-3">
+      <p class="form-control-plaintext">Customer: <strong>{{ form.instance.user.username }}</strong></p>
+    </div>
+    {% endif %}
     {% endif %}
 
     <!-- Date -->
@@ -95,7 +102,13 @@
     </div>
     {% endif %}
 
-    <button type="submit" class="btn btn-success">Update Booking</button>
+    <button type="submit" class="btn btn-success">
+        {% if form.instance.pk %}
+          Update Booking
+        {% else %}
+          Create Booking
+        {% endif %}
+    </button>
   </form>
 </div>
 
