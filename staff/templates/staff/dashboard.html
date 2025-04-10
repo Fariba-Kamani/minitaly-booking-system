@@ -41,11 +41,11 @@
     </div>
 
     <div class="col-md-3 align-self-end">
-      <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+      <button type="submit" class="btn filter-btn w-100">Apply Filters</button>
     </div>
   </form>
-
-  <table class="table table-striped">
+  <div class="table-responsive">
+    <table class="table table-striped">
     <thead>
       <tr>
         <th>Customer</th>
@@ -65,17 +65,21 @@
         <td>{{ booking.num_guests }}</td>
         <td>{{ booking.special_request|default:"—" }}</td>
         <td>
-          <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-warning">Edit</a>
+          
+          <div class="d-flex flex-column gap-2">
+            <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-edit w-100">Edit</a>
 
-          <!-- Cancel button with modal trigger -->
-          <button
+            <!-- Cancel button with modal trigger -->
+            <button
             type="button"
-            class="btn btn-sm btn-outline-danger"
+            class="btn btn-sm btn-cancel w-100"
             data-bs-toggle="modal"
             data-bs-target="#cancelModal{{ booking.id }}"
           >
             Cancel
-          </button>
+            </button>
+          </div>
+          
 
           <!-- Modal -->
           <div
@@ -128,6 +132,7 @@
       </tr>
       {% endfor %}
     </tbody>
-  </table>
+    </table>
+  </div>
 </div>
 {% endblock %}

@@ -1,3 +1,35 @@
+/* base.html */
+
+/* Logo */
+.text-italy-green {
+    color: #009246 !important;  /* Italian green */
+  }
+  
+  .text-italy-red {
+    color: #ce2b37 !important;  /* Italian red */
+  }
+
+/* Base nav-link style */
+.nav-link {
+    color: black !important;
+    transition: color 0.3s ease;
+  }
+  
+  /* Active nav-link (Italian green) */
+  .nav-link.active {
+    color: #009246 !important;
+    font-weight: 600;
+  }
+  
+  .status-login {
+    color: #009246 !important;
+  }
+
+  .status-log-out {
+    color: #CE2B37 !important;
+
+  }
+
 /* index.html */
 .hero-image {
     position: relative;
@@ -25,13 +57,81 @@
   }
 
   .btn-light:hover {
-    color: gray !important; 
+    color: #009246 !important; 
   }
   
   /* menu.html */
   .card.italian-border {
     border: 2px solid #CE2B37;
     border-radius: 10px;
+  }
+  /* staff_form.html */
+  .form-check-input:checked {
+    background-color: #009246;
+    border-color: #009246;
+  }
+
+  /* dashboard.html */
+  .filter-btn {
+    background-color: #009246; 
+    color: white;
+    border: none;
+  }
+
+  .filter-btn:hover {
+    background-color: #afeecd; 
+    color: black;
+  }
+
+  .btn-edit {
+    background-color: #009246; 
+    color: white;
+    border: none;
+    min-width: 75px;
+  }
+  
+  .btn-edit:hover {
+    background-color: #afeecd;
+    color: black;
+  }
+  
+  .btn-cancel {
+    background-color: #c70039; 
+    color: white;
+    border: none;
+    min-width: 75px;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #f07f9d;
+    color: black;
+  }
+  
+
+  /* login.html, logout.html, and signup.html */
+
+  .link {
+    color: #009246; 
+  }
+
+  .link:hover {
+    color: #007a3d; 
+  }
+
+  input[type="checkbox"] {
+    accent-color: #009246; 
+  }
+
+  .btn-signup {
+    background-color: #009246; 
+    color: white;
+    margin-bottom: 2rem;
+    border: none;
+  }
+  
+  .btn-signup:hover {
+    background-color: #afeecd; /* light green on hover */
+    color: black;
   }
   
   /* Footer */
@@ -41,5 +141,5 @@
   }
   
   .social-icons a:hover i {
-    color: gray;
+    color: #009246;
   }

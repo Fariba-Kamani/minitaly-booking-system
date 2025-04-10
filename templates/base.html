@@ -35,7 +35,7 @@
       crossorigin="anonymous"
     />
     <!-- style.css -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
 
   <body class="d-flex flex-column h-100 main-bg">
@@ -43,9 +43,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
-          <span class="brand"
-            >m<span class="red-o">i</span>n<span class="thin">Italy</span></span
-          >
+          <span class="text-italy-green fw-bold">min</span><span class="text-italy-red fw-light">Italy</span>
         </a>
         <button
           class="navbar-toggler"
@@ -69,9 +67,11 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if request.path == '/menu/' %}active{% endif %}" 
-              href="{% url 'menu' %}"
-              >Menu</a>
+              <a
+                class="nav-link {% if request.path == '/menu/' %}active{% endif %}"
+                href="{% url 'menu' %}"
+                >Menu</a
+              >
             </li>
 
             {% if user.is_authenticated %}
@@ -83,29 +83,46 @@
               >
             </li>
 
-            {% if user.is_staff %}
+            {% if user.is_staff %} 
+            {% url 'staff_booking_create' as staff_booking_create_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'staff_booking_create' %}"
-                >Book for Customer</a
+              <a
+                class="nav-link {% if request.path == staff_booking_create_url %}active{% endif %}"
+                href="{{ staff_booking_create_url }}"
               >
+                Book for Customer
+              </a>
             </li>
+            {% url 'staff_dashboard' as staff_dashboard_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'staff_dashboard' %}"
-                >Dashboard</a
+              <a
+                class="nav-link {% if request.path == staff_dashboard_url %}active{% endif %}"
+                href="{{ staff_dashboard_url }}"
               >
+                Dashboard
+              </a>
             </li>
             {% else %}
+            {% url 'booking_list' as booking_list_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'booking_list' %}"
-                >My Bookings</a
+              <a
+                class="nav-link {% if request.path == booking_list_url %}active{% endif %}"
+                href="{{ booking_list_url }}"
               >
+                My Bookings
+              </a>
             </li>
+            {% url 'booking_create' as booking_create_url %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'booking_create' %}"
-                >Book a Table</a
+              <a
+                class="nav-link {% if request.path == booking_create_url %}active{% endif %}"
+                href="{{ booking_create_url }}"
               >
+                Book a Table
+              </a>
             </li>
-            {% endif %} {% else %}
+            {% endif %}
+            {% else %}
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == signup_url %}active{% endif %}"
@@ -122,18 +139,18 @@
             </li>
             {% endif %}
           </ul>
-
-          <span class="navbar-text text-muted"> Authentic Italian Dining </span>
         </div>
       </div>
     </nav>
 
     <main class="flex-shrink-0 main-bg">
       {% if user.is_authenticated %}
-      <p class="text-end m-3">You are logged in as {{ user }}</p>
+      <p class="text-end m-3 status-login">You are logged in as {{ user }}</p>
       {% else %}
-      <p class="text-end m-3">You are not logged in</p>
-      {% endif %} {% block content %}
+      <p class="text-end m-3 status-log-out">You are not logged in</p>
+      {% endif %}
+      
+      {% block content %}
       <!-- Content Goes here -->
       {% endblock content %}
     </main>
@@ -144,16 +161,36 @@
         <p class="mb-1">© 2025 MinItaly — All rights reserved.</p>
         <p class="mb-2 small">Proudly built by Code Instituters</p>
         <div class="social-icons d-flex justify-content-center gap-3">
-          <a href="https://www.facebook.com" class="text-dark social-link" target="_blank" aria-label="Facebook">
+          <a
+            href="https://www.facebook.com"
+            class="text-dark social-link"
+            target="_blank"
+            aria-label="Facebook"
+          >
             <i class="fab fa-facebook fa-lg"></i>
           </a>
-          <a href="https://www.twitter.com" class="text-dark social-link" target="_blank" aria-label="Twitter">
+          <a
+            href="https://www.twitter.com"
+            class="text-dark social-link"
+            target="_blank"
+            aria-label="Twitter"
+          >
             <i class="fab fa-twitter fa-lg"></i>
           </a>
-          <a href="https://www.instagram.com" class="text-dark social-link" target="_blank" aria-label="Instagram">
+          <a
+            href="https://www.instagram.com"
+            class="text-dark social-link"
+            target="_blank"
+            aria-label="Instagram"
+          >
             <i class="fab fa-instagram fa-lg"></i>
           </a>
-          <a href="https://www.youtube.com" class="text-dark social-link" target="_blank" aria-label="YouTube">
+          <a
+            href="https://www.youtube.com"
+            class="text-dark social-link"
+            target="_blank"
+            aria-label="YouTube"
+          >
             <i class="fab fa-youtube fa-lg"></i>
           </a>
         </div>
