@@ -66,6 +66,11 @@
                 >Home</a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/menu/' %}active{% endif %}" 
+              href="{% url 'menu' %}"
+              >Menu</a>
+            </li>
 
             {% if user.is_authenticated %}
             <li class="nav-item">
@@ -134,7 +139,7 @@
     <!-- Footer -->
     <footer class="footer mt-auto py-4 bg-dark text-white">
       <div class="container text-center">
-        <p class="mb-1">© 2025 Minitaly — All rights reserved.</p>
+        <p class="mb-1">© 2025 MinItaly — All rights reserved.</p>
         <p class="mb-2 small">Proudly built by Code Instituters</p>
         <div class="social-icons">
           <a href="#" class="text-white me-3" aria-label="Facebook">
