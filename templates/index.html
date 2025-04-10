@@ -3,9 +3,11 @@
 {% block title %}Welcome to minItaly{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-    <h1 class="display-4">Benvenuti a minItaly!</h1>
-    <p class="lead">A modern Italian restaurant where tradition meets taste.</p>
-    <a href="{% url 'booking_create' %}" class="btn btn-primary btn-lg">Book a Table</a>
-</div>
+<div class="hero-image text-white text-center d-flex align-items-center justify-content-center">
+    <div class="overlay">
+        <h1 class="display-4">Benvenuti a minItaly!</h1>
+        <p class="lead">An authentic Italian cuisine where food serves with passion.</p>
+        <a href="{% url 'booking_create' %}" class="btn btn-light btn-lg">Book a Table</a>
+    </div>
+  </div>
 {% endblock %}

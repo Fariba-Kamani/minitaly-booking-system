@@ -1,0 +1,38 @@
+.hero-image {
+    position: relative;
+    background-image: url('../bookings/images/minitalycoverimage .jpg');
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-light {
+    transition: color 0.3s ease;
+  }
+
+  .btn-light:hover {
+    color: gray !important; 
+  }
+
+/* Footer */
+.social-icons a i {
+    color: black;
+    transition: color 0.3s ease;
+  }
+  
+  .social-icons a:hover i {
+    color: gray;
+  }
