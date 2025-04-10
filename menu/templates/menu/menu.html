@@ -7,12 +7,17 @@
 
   {% for category in categories %}
     <div class="mb-4">
-      <h3 class="text-primary">{{ category.name }}</h3>
+      <h3 class="text-center" style="color: #009246;">{{ category.name }}</h3>
       <p class="text-muted">{{ category.description }}</p>
       <div class="row">
         {% for item in category.menu_items.all %}
+          {% if forloop.last and forloop.counter|divisibleby:2 == False %}
+          <!-- Center the last item if total is odd -->
+          <div class="col-md-6 offset-md-3 mb-3">
+        {% else %}
           <div class="col-md-6 mb-3">
-            <div class="card shadow-sm h-100">
+        {% endif %}
+            <div class="card shadow-sm h-100 italian-border">
               <div class="card-body">
                 <h5 class="card-title">{{ item.name }}</h5>
                 <p class="card-text">{{ item.description }}</p>

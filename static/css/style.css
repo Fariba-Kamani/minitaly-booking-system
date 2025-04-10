@@ -1,3 +1,4 @@
+/* index.html */
 .hero-image {
     position: relative;
     background-image: url('../bookings/images/minitalycoverimage .jpg');
@@ -26,9 +27,15 @@
   .btn-light:hover {
     color: gray !important; 
   }
-
-/* Footer */
-.social-icons a i {
+  
+  /* menu.html */
+  .card.italian-border {
+    border: 2px solid #CE2B37;
+    border-radius: 10px;
+  }
+  
+  /* Footer */
+  .social-icons a i {
     color: black;
     transition: color 0.3s ease;
   }
