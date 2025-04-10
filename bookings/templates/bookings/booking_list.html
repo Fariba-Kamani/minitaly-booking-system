@@ -47,13 +47,13 @@
               <div>
                 <a
                   href="{% url 'booking_edit' booking.pk %}"
-                  class="btn btn-sm btn-outline-secondary"
+                  class="btn btn-sm btn-edit mb-2 mb-md-0"
                   >Edit</a
                 >
                 <!-- Cancel Button (opens modal) -->
                 <button
                   type="button"
-                  class="btn btn-sm btn-outline-danger"
+                  class="btn btn-sm btn-cancel mb-2 mb-md-0"
                   data-bs-toggle="modal"
                   data-bs-target="#cancelModal{{ booking.id }}"
                 >

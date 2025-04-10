@@ -65,6 +65,26 @@
     border: 2px solid #CE2B37;
     border-radius: 10px;
   }
+
+  /* booking_list.html */
+
+  /* Accordion active button background color override */
+.accordion-button:not(.collapsed) {
+    background-color: #e6f4ec; /* Light Italian green */
+    color: #000; /* Keep text readable */
+  }
+  
+  /*  Remove blue border focus */
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: #e6f4ec;
+  }
+
+  /* Make the accordion arrow (chevron) Italian green */
+  .accordion-button::after {
+    filter: invert(41%) sepia(88%) saturate(577%) hue-rotate(86deg) brightness(90%) contrast(89%);
+  }
+
   /* staff_form.html */
   .form-check-input:checked {
     background-color: #009246;

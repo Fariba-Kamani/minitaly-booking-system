@@ -66,21 +66,18 @@
         <td>{{ booking.special_request|default:"—" }}</td>
         <td>
           
-          <div class="d-flex flex-column gap-2">
-            <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-edit w-100">Edit</a>
+          
+          <a href="{% url 'staff_booking_edit' booking.pk %}" class="btn btn-sm btn-edit mb-2 mb-md-0">Edit</a>
 
-            <!-- Cancel button with modal trigger -->
-            <button
+          <!-- Cancel button with modal trigger -->
+          <button
             type="button"
-            class="btn btn-sm btn-cancel w-100"
+            class="btn btn-sm btn-cancel mb-2 mb-md-0"
             data-bs-toggle="modal"
             data-bs-target="#cancelModal{{ booking.id }}"
           >
             Cancel
-            </button>
-          </div>
-          
-
+          </button>
           <!-- Modal -->
           <div
             class="modal fade"
