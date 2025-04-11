@@ -280,9 +280,7 @@ A Category can have many MenuItem entries, and a MenuItem belongs to one Categor
 ## Skeleton Plane
 
 
-
 ### Wireframes
-
 
 
 ## Surface Plane
@@ -290,6 +288,7 @@ A Category can have many MenuItem entries, and a MenuItem belongs to one Categor
 The Surface Plane focuses on the visual and sensory design of the website — what users see, feel, and interact with. It includes the choice of colors, typography, layout, and imagery, all working together to reflect the brand identity of Minitaly and create a seamless and pleasant user experience.
 
 The following sections outline the Color Scheme, Typography, and Imagery used throughout the project, ensuring consistency, accessibility, and aesthetic appeal across all devices and screen sizes.
+
 
 ### Colour Scheme
 
@@ -330,6 +329,7 @@ Description: A vibrant and inviting photograph of authentic Italian cuisine, sho
 The image is hosted locally in the static files and styled to appear full-width with a semi-transparent overlay and centered text.
 
 To optimize the image for the website and improve loading times for users, I used [Image Resizer.com](https://imageresizer.com/) to resize and compress the image.
+
 
 ## Features
 
@@ -413,18 +413,126 @@ To optimize the image for the website and improve loading times for users, I use
     * Buttons, modals, and tables adjust layout for all screen sizes.
 
 
-
-
-
-
-
-
-
-
 ## Accessibility
+
+MinItaly was built with accessibility in mind to ensure an inclusive and user-friendly experience for all users. Key accessibility considerations include:
+
+* Responsive Design: Fully responsive across mobile, tablet, and desktop devices using Bootstrap 5.
+
+* High Color Contrast: Key elements such as buttons, alerts, and links meet WCAG color contrast standards for visibility.
+
+* Keyboard Navigability: All interactive elements (buttons, links, forms) are navigable using keyboard input.
+
+* Semantic HTML: Use of semantic HTML elements such as `<nav>`, `<main>`, `<footer>`, and proper heading structure for improved screen reader compatibility.
+
+* ARIA and Labeling: All form fields are clearly labeled and use appropriate placeholder text and `<label>` tags.
+
+* Focus States: Form controls and navigation links have clear focus states for users navigating via keyboard or screen readers.
+
+* Alt Text: All images (including favicon and hero image) use alt attributes or are decorative when appropriate.
+
+* Error Handling: User feedback is provided through clearly styled success and error messages.
+
+These steps aim to create a smooth experience for all users, including those using assistive technologies.
+
+
 ## Technologies Used
+
+* [Balsamiq](https://balsamiq.com/) - Used to create wireframes.
+
+* [Git](https://git-scm.com/) - For version control.
+
+* [Github](https://github.com/) - To save and store the files for the website.
+
+* [GitPod](https://gitpod.io/) - IDE used to create the site.
+
+* [Google Fonts](https://fonts.google.com/) - To choose the fonts used on the website.
+
+* [Chrome DevTools](https://developer.chrome.com/docs/devtools) - To troubleshoot and test features, solve issues with responsiveness and styling.
+
+* [Favicon generator](https://realfavicongenerator.net/) - To create favicon.
+
+* [Font Awesome](https://fontawesome.com/) - for used font awesome icons.
+
+* [Am I Responsive?](http://ami.responsivedesign.is/) - To show the website image on a range of devices.
+
+* [Responsive Web Design Checker](https://responsivedesignchecker.com/) - to assess the website's responsiveness
+
+* [WAVE](https://wave.webaim.org/) - a web accessibility evaluation tool
+
+* [Image Resizer.com](https://imageresizer.com/) - To resize and compress images.
+
+* [JSHint](https://jshint.com/) - to validate the JavaScript code.
+
+* [W3C validator](https://validator.w3.org/) - to validate the HTML code.
+
+* [Jigsaw validator](https://jigsaw.w3.org/css-validator/) - to validate the CSS code.
+* Frameworks & Libraries
+    Django – Backend framework
+    Bootstrap 5 – Front-end CSS framework
+    Django Allauth – Authentication
+    Gunicorn – WSGI HTTP server
+    Whitenoise – Serve static files in production
+    dj-database-url – Parse database URLs
+    python-dotenv – Environment variables
+    Font Awesome – Icons
+    Google Fonts – Fonts used on the site
+* Development Tools
+    Git – Version control
+    GitHub – Code hosting
+    GitPod – Cloud-based IDE
+    VS Code 
+    Chrome DevTools – Browser debugging & testing
+    Balsamiq – Wireframes
+* Deployment & Hosting
+    Heroku – Hosting platform
+    PostgreSQL – Production database
+* Design & Assets
+    Favicon Generator – Create favicon
+    Image Resizer – Resize/compress images
+* Testing & Validation
+    W3C Validator – HTML validation
+    Jigsaw CSS Validator – CSS validation
+    JSHint – JavaScript linting
+    WAVE – Accessibility validation
+    Responsive Web Design Checker – Responsive testing
+    Am I Responsive? – Device mockup screenshots
+    Lighthouse
+
+
 ### Languages Used
+
+* HTML5
+* CSS3
+* JavaScript
+* Python 3
+
+
 ### Frameworks, Libraries & Programs Used
+
+Django – main backend framework
+
+Bootstrap 5 – responsive UI styling
+
+Django Allauth – user authentication
+
+Gunicorn – WSGI HTTP server for deployment
+
+Whitenoise – serving static files in production
+
+PostgreSQL – production database
+
+dj-database-url – database configuration
+
+python-dotenv – managing environment variables
+
+Google Fonts – Roboto & Lato typography
+
+Font Awesome – icons
+
+Heroku – hosting and deployment platform
+
+
 ## Deployment & Local Development
 ### Deployment
 ### Local Development

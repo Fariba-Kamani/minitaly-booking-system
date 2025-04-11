@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
@@ -8,6 +8,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import UpdateView, DeleteView
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from .models import Booking
 from .forms import BookingForm
 from .utils import get_available_time_slots
@@ -15,27 +17,45 @@ from .utils import get_available_time_slots
 def home(request):
     return render(request, 'index.html')
 
+# dispatch() is the first method called when a request reaches a class-based view,
+# applying login_required to it ensures that the user must be logged in 
+# before any other HTTP request is processed.
+@method_decorator(login_required, name='dispatch')
 class BookingListView(generic.ListView):
+    """
+    Displays the logged-in user's bookings.
+
+    - Uses `get_queryset` to restrict the displayed bookings to the current user.
+    - Separates upcoming and past bookings in the context data.
+    - Requires user authentication to access this view.
+    - Prevents access to other users' bookings even if URL tampering is attempted.
+    """
     model = Booking
     template_name = 'bookings/booking_list.html'
     context_object_name = 'bookings'
-    
+
+    def get_queryset(self):
+        # Only return bookings for the currently logged-in user
+        return Booking.objects.filter(user=self.request.user)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = timezone.now().date()
 
-        context['upcoming_bookings'] = Booking.objects.filter(
-            user=self.request.user,
-            date__gte=now
+        queryset = self.get_queryset()
+
+        # Filter for future or today's bookings using date greater than or equal to today
+        context['upcoming_bookings'] = queryset.filter(
+            date__gte=now # __gte = Django field look up; greater than or equal to
         ).order_by('date', 'time')
 
-        context['past_bookings'] = Booking.objects.filter(
-            user=self.request.user,
-            date__lt=now
+        # Filter for past bookings using date less than today
+        context['past_bookings'] = queryset.filter(
+            date__lt=now # __lt = Django field look up; less than
         ).order_by('-date', '-time')
 
         return context
-    
+
 
 class BookingUpdateView(registered_users_only, UpdateView):
     model = Booking
