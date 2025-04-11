@@ -295,7 +295,7 @@ The following sections outline the Color Scheme, Typography, and Imagery used th
 
 Minitaly uses a color palette inspired by the Italian flag and cuisine culture to reflect the brand identity and warmth of an Italian dining experience. The scheme includes vibrant greens and reds paired with clean whites and elegant grays for accessibility and clarity.
 
-![minItaly, Colour Scheme](readme-assets\images\color-scheme.png)
+![minItaly, Colour Scheme](readme-assets/images/color-scheme.png)
 
 | Color Role | Hex Code | Usage |
 | --- | --- | --- |
@@ -332,6 +332,95 @@ The image is hosted locally in the static files and styled to appear full-width 
 To optimize the image for the website and improve loading times for users, I used [Image Resizer.com](https://imageresizer.com/) to resize and compress the image.
 
 ## Features
+
+1. Landing Page with Hero Section
+    * Visually engaging hero image.
+    * Welcome message and CTA button ("Book a Table").
+
+2. Responsive Navigation Bar with Role-Based Links
+    * Dynamic links based on authentication and user role.
+    * Brand logo styled with Italian flag colors.
+    * Staff and customers see different navigation items dynamically.
+
+3. User Registration (Sign Up)
+    * Create an account via Django Allauth.
+    * Email and password fields with secure validation.
+    * Custom styling to align with the restaurant branding.
+    * Email verification disabled for fast testing during development.
+
+4. User Authentication (Login)
+    * Log in securely with email and password.
+    * Error messages for incorrect credentials.
+    * "Remember Me" checkbox with custom green tick styling.
+
+5. Log Out Functionality
+    * Secure logout route.
+    * Session cleared on sign out.
+    * Clean redirect
+    * Django styling confirmation message removed for clarity.
+
+6. Book a Table (Customer)
+    * Customers can book tables for specific date, time, and guest count.
+    * Real-time availability based on party size and existing bookings.
+    * Confirmation email sent after successful booking.
+
+7. Edit Booking
+    * Customers can edit date, time, number of guests, or special request.
+    * Booking availability checks again before saving.
+    * Updated booking confirmation message displayed.
+
+8. Cancel Booking
+    * Customers can cancel upcoming bookings via a confirmation modal.
+    * Cancellations remove the booking from availability.
+
+9. Success confirmation messages for booking actions
+    * Users and staff receive clear success messages after creating, editing, or cancelling a booking. Enhances user experience by confirming that their action was successful.
+
+10. My Bookings; Customer Dashboard 
+    * View upcoming bookings and booking history in two collapsible accordion sections
+    * Edit or cancel upcoming reservations.
+    * Responsive accordion-style UI for easy toggling.
+
+11. Staff Dashboard
+    * Staff can view all upcoming bookings in a table layout.
+    * Filter bookings by date, time, or customer name.
+    * Edit or cancel any booking on behalf of customers.
+    * Cancellation includes providing a reason and sending a confirmation email.
+
+12. Create Booking on Behalf of Customer (Staff Only)
+    * Staff can select a customer from a dropdown.
+    * Booking behaves the same as customer booking form.
+    * Confirmation success message to staff and confirmation email sent to selected customer.
+
+13. Defensive Design with Confirmation Modals
+    * Booking cancellations require user confirmation via Bootstrap modal.
+    * Customers confirm before canceling their own reservations.
+    * Staff confirm and provide cancellation reasons before canceling bookings.
+
+14. Menu Display Page
+    * Fully structured menu with categories, prices, and descriptions.
+    * Responsive card layout styled with Bootstrap.
+
+15. Email Notifications
+    * Confirmation email sent after successful booking.
+    * Cancellation email sent when a reservation is cancelled.
+    * Optional booking reminder 24 hours before reservation (if enabled).
+
+16. Custom Styling with Bootstrap and CSS inspired by the Italian flag colors (green, white, red).
+
+17. Mobile-First & Responsive Design
+    * All views optimized for mobile, tablet, and desktop.
+    * Buttons, modals, and tables adjust layout for all screen sizes.
+
+
+
+
+
+
+
+
+
+
 ## Accessibility
 ## Technologies Used
 ### Languages Used
