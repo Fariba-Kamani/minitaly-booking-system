@@ -1,5 +1,11 @@
-/* base.html */
+body {
+    font-family: 'Lato', sans-serif;
+  }
 
+h1, h2, h3, h4, h5, h6, .display-4, p {
+    font-family: 'Roboto', sans-serif;
+  }
+/* base.html */
 /* Logo */
 .text-italy-green {
     color: #009246 !important;  /* Italian green */
