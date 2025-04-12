@@ -20,22 +20,26 @@ def get_available_time_slots(date, num_guests):
     all_slots = generate_time_slots(date)
     bookings = Booking.objects.filter(date=date)
 
-    # Build a tracker for booked tables
+    # Track booked tables per time slot and table size
     booked = defaultdict(lambda: defaultdict(int))  # {time: {size: count}}
 
     for b in bookings:
-        booked[b.time][b.num_guests] += 1
+        for size in sorted(TABLE_INVENTORY):
+            if size >= b.num_guests:
+                booked[b.time][size] += 1
+                break
 
     available_slots = []
 
     for slot in all_slots:
-        suitable_sizes = [size for size in TABLE_INVENTORY if size >= num_guests and size <= MAX_GUESTS_PER_BOOKING]
+        # Find the best-fitting table size for this guest count
+        suitable_sizes = sorted(size for size in TABLE_INVENTORY if size >= num_guests)
 
-        available = False
-        for size in suitable_sizes:
-            if booked[slot][size] < TABLE_INVENTORY[size]:
-                available = True
-                break
+        if not suitable_sizes:
+            available = False  # no table fits this group size
+        else:
+            best_fit = suitable_sizes[0]
+            available = booked[slot][best_fit] < TABLE_INVENTORY[best_fit]
 
         available_slots.append({
             "time": slot,

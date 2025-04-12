@@ -3,6 +3,8 @@ from .models import Booking
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from collections import defaultdict
+from .constants import TABLE_INVENTORY
 
 class BookingForm(forms.ModelForm):
     user = forms.ModelChoiceField(
@@ -38,10 +40,10 @@ class BookingForm(forms.ModelForm):
         time = cleaned_data.get('time')
         num_guests = cleaned_data.get('num_guests')
 
-        if not date or not time:
-            return cleaned_data  # Let field-level errors handle missing values
+        if not date or not time or not num_guests:
+            return cleaned_data  # Let field-level errors handle missing data
 
-        # Editing logic — skip conflict check if unchanged
+        # If editing and nothing has changed, skip re-validation
         if self.instance.pk:
             same_booking = (
                 self.instance.date == date and
@@ -51,13 +53,35 @@ class BookingForm(forms.ModelForm):
             if same_booking:
                 return cleaned_data
 
-        # Conflict check
-        conflicts = Booking.objects.filter(date=date, time=time, is_cancelled=False)
-        if self.instance.pk:
-            conflicts = conflicts.exclude(pk=self.instance.pk)
+        # Find best-fit table size
+        suitable_sizes = sorted(size for size in TABLE_INVENTORY if size >= num_guests)
+        if not suitable_sizes:
+            raise ValidationError("Sorry, we can't accommodate that many guests.")
 
-        if conflicts.exists():
-            raise ValidationError("This time slot is already booked. Please choose another.")
+        best_fit_size = suitable_sizes[0]
+
+        # Count how many tables of that size are already booked at this date/time
+        existing_bookings = Booking.objects.filter(
+            date=date,
+            time=time,
+            is_cancelled=False
+        )
+
+        # Exclude self when editing
+        if self.instance.pk:
+            existing_bookings = existing_bookings.exclude(pk=self.instance.pk)
+
+        # Count how many best-fit tables are already taken
+        taken = 0
+        for booking in existing_bookings:
+            for size in sorted(TABLE_INVENTORY):
+                if size >= booking.num_guests:
+                    if size == best_fit_size:
+                        taken += 1
+                    break
+
+        if taken >= TABLE_INVENTORY[best_fit_size]:
+            raise ValidationError("This time slot is fully booked for your party size. Please choose another.")
 
         return cleaned_data
 
