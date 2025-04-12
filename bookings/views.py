@@ -132,7 +132,6 @@ class BookingDeleteView(SuccessMessageMixin, DeleteView):
         return redirect(self.success_url)
 
 
-
 @method_decorator(login_required, name='dispatch')
 class BookingCreateView(CreateView):
     """
