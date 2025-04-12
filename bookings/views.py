@@ -50,7 +50,8 @@ class BookingListView(generic.ListView):
 
         # Filter for future or today's bookings using date greater than or equal to today
         context['upcoming_bookings'] = queryset.filter(
-            date__gte=now # __gte = Django field look up; greater than or equal to
+            date__gte=now, # __gte = Django field look up; greater than or equal to
+            is_cancelled=False
         ).order_by('date', 'time')
 
         # Filter for past bookings using date less than today
