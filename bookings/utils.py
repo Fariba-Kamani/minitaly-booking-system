@@ -20,7 +20,7 @@ def get_available_time_slots(date, num_guests):
     all_slots = generate_time_slots(date)
     bookings = Booking.objects.filter(date=date)
 
-     # Build a tracker for booked tables
+    # Build a tracker for booked tables
     booked = defaultdict(lambda: defaultdict(int))  # {time: {size: count}}
 
     for b in bookings:

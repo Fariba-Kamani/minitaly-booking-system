@@ -9,18 +9,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         now = timezone.now()
+        print(f"Now: {now}")
         reminder_time = now + timedelta(days=1)
         reminder_date = reminder_time.date()
         reminder_hour = reminder_time.time().replace(minute=0, second=0, microsecond=0)
+
+        print(f"Reminder time target: {reminder_time}")
+        print(f"Reminder date: {reminder_date}")
+        print(f"Reminder hour: {reminder_hour}")
 
         bookings = Booking.objects.filter(
             date=reminder_date,
             time__hour=reminder_hour.hour,
             send_reminder=True,
+            reminder_sent=False,
             is_cancelled=False
         )
-
+        print(f"Found bookings: {bookings.count()}")
         for booking in bookings:
+            print(f"Booking: {booking.user.username}, {booking.date} at {booking.time}, reminder={booking.send_reminder}, cancelled={booking.is_cancelled}")
             user = booking.user
             email = user.email
 
@@ -40,5 +47,8 @@ class Command(BaseCommand):
                 recipient_list=[email],
                 fail_silently=False,
             )
+            # Mark the reminder as sent to avoid duplicates
+            booking.reminder_sent = True
+            booking.save()
 
         self.stdout.write(self.style.SUCCESS(f"Sent {bookings.count()} reminder(s)."))
