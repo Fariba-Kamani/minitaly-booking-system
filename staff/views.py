@@ -1,3 +1,16 @@
+"""
+staff/views.py
+
+Defines views for staff/admin users to manage restaurant bookings.
+
+All views are protected with `user_passes_test(lambda u: u.is_staff)` to restrict access to staff users only.
+
+Includes:
+- Dashboard view with filtering
+- Booking creation, update, and soft-delete functionality
+- Email notifications to customers
+"""
+
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, DeleteView
@@ -11,15 +24,16 @@ from datetime import date
 from bookings.models import Booking
 from bookings.forms import BookingForm, StaffBookingForm
 
-# --------------------------------------
-# STAFF VIEWS - Protected by is_staff check
-# --------------------------------------
 
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class BookingDashboardView(ListView):
     """
     Displays all upcoming, non-cancelled bookings for staff/admin users.
-    Supports filtering by date, time, and customer username via GET parameters.
+
+    Supports optional filtering via GET parameters:
+    - date: Exact match (YYYY-MM-DD)
+    - time: Exact match (HH:MM[:SS])
+    - customer: Partial match on username
     """
     model = Booking
     template_name = 'staff/dashboard.html'
@@ -31,7 +45,7 @@ class BookingDashboardView(ListView):
             is_cancelled=False
         ).order_by('date', 'time')
 
-        # Optional filters from query params
+        # Optional filtering from query parameters
         selected_date = self.request.GET.get('date')
         selected_time = self.request.GET.get('time')
         customer = self.request.GET.get('customer')
@@ -49,8 +63,10 @@ class BookingDashboardView(ListView):
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class StaffBookingUpdateView(UpdateView):
     """
-    Allows staff to update an existing booking while preserving customer assignment.
-    Uses a custom form that excludes the 'user' field.
+    Allows staff to update an existing booking without changing the customer.
+
+    Uses a custom form (StaffBookingForm) that excludes the 'user' field,
+    ensuring that the booking remains associated with the original customer.
     """
     model = Booking
     form_class = StaffBookingForm
@@ -65,12 +81,12 @@ class StaffBookingUpdateView(UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        # Prevent staff from changing the customer during update
+        # Remove 'user' field to prevent changes to the customer
         form.fields.pop('user', None)
         return form
 
     def form_valid(self, form):
-        # Enforce customer lock for security, in case of form tampering
+        # Enforce original customer assignment, even if tampering attempted
         form.instance.user = self.get_object().user
         staff_name = self.request.user.username
         messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
@@ -80,18 +96,21 @@ class StaffBookingUpdateView(UpdateView):
 @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class StaffBookingDeleteView(DeleteView):
     """
-    Allows staff to cancel a booking (soft-delete).
-    - Marks the booking as is_cancelled=True
-    - Captures a cancellation reason
-    - Sends a cancellation email to the customer
-    - Prevents GET access to avoid accidental deletions
+    Allows staff to cancel a booking (soft-delete approach).
+
+    Instead of deleting the booking, it:
+    - Sets `is_cancelled=True`
+    - Records a cancellation reason
+    - Sends an email to notify the customer
+
+    GET requests are blocked to avoid accidental cancellations.
     """
     model = Booking
     success_url = reverse_lazy('staff_dashboard')
     template_name = 'staff/dashboard.html'
 
     def get(self, request, *args, **kwargs):
-        # Block GET access to this view — cancellations should only be via POST
+        # Block GET access — use POST only to prevent accidental deletions
         return redirect('staff_dashboard')
 
     def post(self, request, *args, **kwargs):
@@ -100,7 +119,7 @@ class StaffBookingDeleteView(DeleteView):
         self.object.cancellation_reason = request.POST.get("cancellation_reason", "")
         self.object.save()
 
-        # Notify customer via email
+        # Send cancellation email to customer
         send_mail(
             subject='Your booking has been cancelled',
             message=f"Dear {self.object.user.first_name or self.object.user.username},\n\n"
@@ -124,9 +143,11 @@ class StaffBookingDeleteView(DeleteView):
 class StaffBookingCreateView(CreateView):
     """
     Allows staff to create a new booking on behalf of a customer.
-    - Customer is selected from a dropdown
-    - Sends confirmation email to the customer
-    - Displays staff attribution in success message
+
+    Features:
+    - Staff selects customer from a dropdown (`user` field).
+    - Sends confirmation email to the customer.
+    - Displays staff attribution in the success message.
     """
     model = Booking
     form_class = StaffBookingForm
@@ -134,7 +155,7 @@ class StaffBookingCreateView(CreateView):
     success_url = reverse_lazy('staff_dashboard')
 
     def get_form_kwargs(self):
-        # Pass request into form if needed (e.g., for filtering users)
+        # Pass request into form for potential custom logic (e.g., filtering customers)
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
@@ -142,7 +163,7 @@ class StaffBookingCreateView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        # Send confirmation email to the customer
+        # Send confirmation email to customer
         send_mail(
             subject="Your booking is confirmed - Minitaly",
             message=f"Dear {form.instance.user.first_name or form.instance.user.username},\n\n"
