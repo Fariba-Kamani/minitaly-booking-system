@@ -1,18 +1,22 @@
-from django.shortcuts import render, redirect
+from datetime import datetime
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin as registered_users_only
-from django.utils import timezone
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.edit import UpdateView, DeleteView
-from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.utils import timezone
 from django.core.mail import send_mail
+from django.http import JsonResponse, HttpResponseForbidden
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_GET
+
 from .models import Booking
 from .forms import BookingForm
 from .utils import get_available_time_slots
+
 
 def home(request):
     return render(request, 'index.html')
@@ -57,21 +61,42 @@ class BookingListView(generic.ListView):
         return context
 
 
-class BookingUpdateView(registered_users_only, UpdateView):
+@method_decorator(login_required, name='dispatch')
+class BookingUpdateView(UpdateView):
+    """
+    View for updating a booking by a logged-in customer.
+    - Only the booking's owner can access and update it.
+    - Unauthorized access is blocked with an HTTP 403 Forbidden response.
+    """
     model = Booking
     form_class = BookingForm
     template_name = 'bookings/booking_form.html'
     success_url = reverse_lazy('booking_list')
 
     def get_queryset(self):
+        # Only return bookings belonging to the logged-in user
         return Booking.objects.filter(user=self.request.user)
-    
+
+    def dispatch(self, request, *args, **kwargs):
+        # Defensive check: ensure the user owns this booking
+        booking = get_object_or_404(Booking, pk=kwargs['pk'])
+        if booking.user != request.user:
+            return HttpResponseForbidden("You are not allowed to edit this booking.")
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         messages.success(self.request, "Your booking has been successfully updated!")
         return super().form_valid(form)
     
 
-class BookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteView):
+@method_decorator(login_required, name='dispatch')
+class BookingDeleteView(SuccessMessageMixin, DeleteView):
+    """
+    View for canceling a booking by the booking owner.
+    - Only the user who made the booking can cancel it.
+    - Displays a success message upon cancellation.
+    - Sends a cancellation email instead of deleting the booking.
+    """
     model = Booking
     template_name = 'bookings/booking_confirm_delete.html'
     success_url = reverse_lazy('booking_list')
@@ -80,17 +105,53 @@ class BookingDeleteView(SuccessMessageMixin, registered_users_only, DeleteView):
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
 
-class BookingCreateView(registered_users_only, generic.CreateView):
+    def dispatch(self, request, *args, **kwargs):
+        booking = get_object_or_404(Booking, pk=kwargs['pk'])
+        if booking.user != request.user:
+            return HttpResponseForbidden("You are not allowed to cancel this booking.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        booking = self.get_object()
+        booking.is_cancelled = True
+        booking.save()
+
+        # Send cancellation email
+        send_mail(
+            subject="Your booking has been cancelled - Minitaly",
+            message=f"Dear {booking.user.first_name or booking.user.username},\n\n"
+                    f"Your booking on {booking.date} at {booking.time.strftime('%H:%M')} has been cancelled.\n\n"
+                    f"If this was a mistake, please contact us to rebook.\n\n"
+                    f"Best regards,\nMinitaly",
+            from_email=None,
+            recipient_list=[booking.user.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, self.success_message)
+        return redirect(self.success_url)
+
+
+
+@method_decorator(login_required, name='dispatch')
+class BookingCreateView(CreateView):
+    """
+    View for creating a new booking by a logged-in customer.
+    - Automatically assigns the logged-in user as the booking owner.
+    - Sends a confirmation email upon successful booking.
+    - Displays a success message and redirects to the booking list.
+    """
     model = Booking
     form_class = BookingForm
     template_name = 'bookings/booking_form.html'
     success_url = reverse_lazy('booking_list')
 
     def form_valid(self, form):
+        # Associate the booking with the current user
         form.instance.user = self.request.user
         response = super().form_valid(form)
 
-        # Send confirmation email
+        # Send confirmation email to user
         send_mail(
             subject="Your booking is confirmed - Minitaly",
             message=f"Dear {self.request.user.first_name or self.request.user.username},\n\n"
@@ -102,29 +163,40 @@ class BookingCreateView(registered_users_only, generic.CreateView):
                     f"Special Request: {form.instance.special_request or 'None'}\n\n"
                     f"We look forward to seeing you!\n\n"
                     f"Best regards,\nMinitaly",
-            from_email=None,
+            from_email=None,  # Uses DEFAULT_FROM_EMAIL
             recipient_list=[self.request.user.email],
             fail_silently=False,
         )
 
+        # Show success message and proceed
         messages.success(self.request, "Your booking has been successfully created!")
         return response
 
 
+@require_GET
+@login_required
 def available_slots_api(request):
+    """
+    API endpoint to fetch available booking time slots
+    for a given date (string) and guest count (integer).
+    - Only accessible by logged-in users.
+    - Returns a JSON response with available time slots from custom utility function.
+    """
     date_str = request.GET.get('date')
     guests = request.GET.get('guests')
 
+    # Check for required query parameters in GET request
     if not date_str or not guests:
         return JsonResponse({'error': 'Missing parameters'}, status=400)
 
-    from datetime import datetime
     try:
+        # Validate date and guest input
         selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
         guests = int(guests)
     except ValueError:
         return JsonResponse({'error': 'Invalid input'}, status=400)
 
+    # Get available slots from utility function
     slots = get_available_time_slots(selected_date, guests)
 
     return JsonResponse({'slots': slots})
