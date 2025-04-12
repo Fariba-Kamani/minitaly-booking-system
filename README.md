@@ -27,8 +27,12 @@ Visit the deployed site: [minItaly](https://minitaly-booking-system-de8b5948572a
 * [Features](#features)
 * [Accessibility](#accessibility)
 * [Technologies Used](#technologies-used)
-    * [Languages Used](#languages-used)
-    * [Frameworks, Libraries & Programs Used](#frameworks-libraries--programs-used)
+    * [Languages](#languages)
+    * [Frameworks & Libraries](#frameworks--libraries)
+    * [Backend, Deployment & Hosting](#backend-deployment--hosting)
+    * [Development Tools](#development-tools)
+    * [Design & Assets](#design--assets)
+    * [Validation & Testing Tools](#validation--testing-tools)
 * [Deployment & Local Development](#deployment--local-development)
   * [Deployment](#deployment)
   * [Local Development](#local-development)
@@ -438,103 +442,196 @@ These steps aim to create a smooth experience for all users, including those usi
 
 ## Technologies Used
 
-* [Balsamiq](https://balsamiq.com/) - Used to create wireframes.
+### Languages
 
-* [Git](https://git-scm.com/) - For version control.
-
-* [Github](https://github.com/) - To save and store the files for the website.
-
-* [GitPod](https://gitpod.io/) - IDE used to create the site.
-
-* [Google Fonts](https://fonts.google.com/) - To choose the fonts used on the website.
-
-* [Chrome DevTools](https://developer.chrome.com/docs/devtools) - To troubleshoot and test features, solve issues with responsiveness and styling.
-
-* [Favicon generator](https://realfavicongenerator.net/) - To create favicon.
-
-* [Font Awesome](https://fontawesome.com/) - for used font awesome icons.
-
-* [Am I Responsive?](http://ami.responsivedesign.is/) - To show the website image on a range of devices.
-
-* [Responsive Web Design Checker](https://responsivedesignchecker.com/) - to assess the website's responsiveness
-
-* [WAVE](https://wave.webaim.org/) - a web accessibility evaluation tool
-
-* [Image Resizer.com](https://imageresizer.com/) - To resize and compress images.
-
-* [JSHint](https://jshint.com/) - to validate the JavaScript code.
-
-* [W3C validator](https://validator.w3.org/) - to validate the HTML code.
-
-* [Jigsaw validator](https://jigsaw.w3.org/css-validator/) - to validate the CSS code.
-* Frameworks & Libraries
-    Django – Backend framework
-    Bootstrap 5 – Front-end CSS framework
-    Django Allauth – Authentication
-    Gunicorn – WSGI HTTP server
-    Whitenoise – Serve static files in production
-    dj-database-url – Parse database URLs
-    python-dotenv – Environment variables
-    Font Awesome – Icons
-    Google Fonts – Fonts used on the site
-* Development Tools
-    Git – Version control
-    GitHub – Code hosting
-    GitPod – Cloud-based IDE
-    VS Code 
-    Chrome DevTools – Browser debugging & testing
-    Balsamiq – Wireframes
-* Deployment & Hosting
-    Heroku – Hosting platform
-    PostgreSQL – Production database
-* Design & Assets
-    Favicon Generator – Create favicon
-    Image Resizer – Resize/compress images
-* Testing & Validation
-    W3C Validator – HTML validation
-    Jigsaw CSS Validator – CSS validation
-    JSHint – JavaScript linting
-    WAVE – Accessibility validation
-    Responsive Web Design Checker – Responsive testing
-    Am I Responsive? – Device mockup screenshots
-    Lighthouse
+- **HTML5**
+- **CSS3**
+- **JavaScript**
+- **Python 3**
 
 
-### Languages Used
+### Frameworks & Libraries
 
-* HTML5
-* CSS3
-* JavaScript
-* Python 3
+- **[Django](https://www.djangoproject.com/)** – Backend web framework
+- **[Bootstrap 5](https://getbootstrap.com/)** – Front-end CSS framework for responsive UI
+- **[Django Allauth](https://django-allauth.readthedocs.io/)** – User registration and authentication
+- **[Font Awesome](https://fontawesome.com/)** – Icons
+- **[Google Fonts](https://fonts.google.com/)** – Typography (Roboto and Lato)
 
 
-### Frameworks, Libraries & Programs Used
+### Backend, Deployment & Hosting
 
-Django – main backend framework
+- **[Gunicorn](https://gunicorn.org/)** – WSGI server for deploying Django apps
+- **[Whitenoise](https://whitenoise.readthedocs.io/)** – Static file serving in production
+- **[PostgreSQL](https://www.postgresql.org/)** – Production database
+- **[dj-database-url](https://pypi.org/project/dj-database-url/)** – Parses database URLs for Django
+- **[python-dotenv](https://pypi.org/project/python-dotenv/)** – Load environment variables
+- **[Heroku](https://www.heroku.com/)** – Hosting platform
 
-Bootstrap 5 – responsive UI styling
 
-Django Allauth – user authentication
+### Development Tools
 
-Gunicorn – WSGI HTTP server for deployment
+- **[Git](https://git-scm.com/)** – Version control
+- **[GitHub](https://github.com/)** – Code hosting and collaboration
+- **[GitPod](https://gitpod.io/)** / **VS Code** – IDEs used during development
+- **[Chrome DevTools](https://developer.chrome.com/docs/devtools/)** – Inspect and debug frontend
+- **[Balsamiq](https://balsamiq.com/)** – Wireframes
 
-Whitenoise – serving static files in production
 
-PostgreSQL – production database
+### Design & Assets
 
-dj-database-url – database configuration
+- **[Favicon Generator](https://realfavicongenerator.net/)** – Generate favicon icons
+- **[Image Resizer](https://imageresizer.com/)** – Compress and resize images
+- **[Am I Responsive?](http://ami.responsivedesign.is/)** – Mockup screenshots on multiple devices
 
-python-dotenv – managing environment variables
 
-Google Fonts – Roboto & Lato typography
+### Validation & Testing Tools
 
-Font Awesome – icons
-
-Heroku – hosting and deployment platform
+- **[W3C Validator](https://validator.w3.org/)** – HTML validation
+- **[Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/)** – CSS validation
+- **[JSHint](https://jshint.com/)** – JavaScript linting
+- **[WAVE](https://wave.webaim.org/)** – Web accessibility evaluation
+- **[Responsive Design Checker](https://responsivedesignchecker.com/)** – Responsive layout testing
+- **[Lighthouse](https://developers.google.com/web/tools/lighthouse/)** – Performance, accessibility, and SEO audits
 
 
 ## Deployment & Local Development
+
 ### Deployment
+
+This project is deployed on Heroku using a PostgreSQL database provided by Code Institute’s PostgreSQL service. Below are the steps taken to prepare and deploy the project.
+
+* **Setup PostgreSQL Database**
+
+    1. Go to the PostgreSQL from Code Institute portal.
+
+    2. Enter your Code Institute student email and click Submit.
+
+    3. Wait until the database is created and check your email inbox for the database URL.
+
+    4. In your Django project, create a file called `env.py` at the root level.
+
+    5. Add the following inside `env.py`:
+        ```
+        python
+
+        import os
+
+        os.environ.setdefault("DATABASE_URL", "<your-db-url-here>") 
+        ```
+    6. Add `env.py` to your `.gitignore` to keep it private:
+        ```
+        bash
+
+        echo "env.py" >> .gitignore
+
+        ```
+* **Install PostgreSQL Requirements**
+
+    In the terminal, install the required packages:
+
+    ```
+    bash
+
+    pip3 install dj-database-url~=0.5 psycopg2~=2.9
+    pip3 freeze > requirements.txt
+
+    ```
+
+    Update `settings.py`:
+
+    ```
+    python
+
+    import os
+    import dj_database_url
+
+    if os.path.isfile('env.py'):
+        import env
+
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
+
+    ```
+* **Migrate and Create Superuser**
+
+    ```
+    bash
+
+    python3 manage.py migrate
+    python3 manage.py createsuperuser
+
+    ```
+
+* **Secret Key and Email Config**
+
+    In your `settings.py`, make sure your secret key and email credentials are loaded via environment variables:
+
+    ```
+    python
+
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    DEFAULT_FROM_EMAIL = f"Minitaly <{EMAIL_HOST_USER}>"
+
+    ```
+
+    Add the following config vars in your Heroku dashboard:
+
+    | Key | Value |
+    |---|---|
+    | DATABASE_URL       | Your PostgreSQL URL       |
+    | SECRET_KEY         | Your Django secret key    |
+    | EMAIL_HOST_USER    | Gmail email address       |
+    | EMAIL_HOST_PASSWORD | Gmail App password        |
+
+* **Final Heroku Setup**
+
+    1. In your terminal:
+
+        ```
+        bash
+
+        pip3 install gunicorn
+        pip3 freeze > requirements.txt
+
+        ```
+    
+    2. Add a `Procfile` to the root directory:
+
+       ```
+       Procfile
+
+       web: gunicorn minitaly.wsgi:application
+
+       ``` 
+    3. Run `collectstatic` to gather all static assets:
+
+        ```
+        bash
+
+        python3 manage.py collectstatic
+
+        ```
+    
+    4. Set `DEBUG = False` in minitaly/settings.py, and update:
+
+        ```
+        python
+
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'minitaly-booking-system-de8b5948572a.herokuapp.com']
+
+        ```
+    
+    5. Push changes to GitHub, then deploy from the Heroku dashboard.
+
+
 ### Local Development
 ### How to Fork
 ### How to Clone
