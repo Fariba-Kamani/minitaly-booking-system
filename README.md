@@ -1,6 +1,6 @@
 # minItaly Booking System
 
-![minItaly Booking System](readme-assets\images\responsive-mockup.png)
+![minItaly Booking System](readme-assets/images/responsive-mockup.png)
 
 Welcome to Minitaly, a stylish and intuitive restaurant booking platform built with Django. Designed to offer a smooth experience for both customers and staff, it allows users to book, manage, and cancel reservations while providing staff with administrative tools and a real-time dashboard.
 

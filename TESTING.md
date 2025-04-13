@@ -1,6 +1,6 @@
 # minItaly Booking System -  Testing
 
-![minItaly Booking System](readme-assets\images\responsive-mockup.png)
+![minItaly Booking System](readme-assets/images/responsive-mockup.png)
 
 Visit the deployed site: [minItaly](https://minitaly-booking-system-de8b5948572a.herokuapp.com/)
 
@@ -60,29 +60,29 @@ Lighthouse performance, accessibility, and SEO checks were performed using Chrom
 
 | Page | Result |
 | --- | --- |
-| Home page | ![Home page](readme-assets\lighthouse\homepage-lighthouse-desktop.png) |
-| Menu | ![Menu](readme-assets\lighthouse\menu-lighthouse-desktop.png) |
-| Register | ![Register](readme-assets\lighthouse\register-lighthouse-desktop.png) |
-| Login | ![Login](readme-assets\lighthouse\login-lighthouse-desktop.png) |
-| My Bookings | ![My Bookings](readme-assets\lighthouse\my-bookings-lighthouse-desktop.png) |
-| Book a Table | ![Book a Table](readme-assets\lighthouse\book-a-table-lighthouse-desktop.png) |
-| Book for Customer | ![Book for Customer](readme-assets\lighthouse\book-for-customer-lighthouse-desktop.png) |
-| Dashboard (staff/admin only) | ![Dashboard](readme-assets\lighthouse\dashboard-lighthouse-desktop.png) |
-| Logout | ![Logout](readme-assets\lighthouse\logout-lighthouse-desktop.png) |
+| Home page | ![Home page](readme-assets/lighthouse/homepage-lighthouse-desktop.png) |
+| Menu | ![Menu](readme-assets/lighthouse/menu-lighthouse-desktop.png) |
+| Register | ![Register](readme-assets/lighthouse/register-lighthouse-desktop.png) |
+| Login | ![Login](readme-assets/lighthouse/login-lighthouse-desktop.png) |
+| My Bookings | ![My Bookings](readme-assets/lighthouse/my-bookings-lighthouse-desktop.png) |
+| Book a Table | ![Book a Table](readme-assets/lighthouse/book-a-table-lighthouse-desktop.png) |
+| Book for Customer | ![Book for Customer](readme-assets/lighthouse/book-for-customer-lighthouse-desktop.png) |
+| Dashboard (staff/admin only) | ![Dashboard](readme-assets/lighthouse/dashboard-lighthouse-desktop.png) |
+| Logout | ![Logout](readme-assets/lighthouse/logout-lighthouse-desktop.png) |
 
 #### Mobile Results
 
 | Page | Result |
 | --- | --- |
-| Home page | ![Home Page](readme-assets\lighthouse\homepage-lighthouse-mobile.png) |
-| Menu | ![Menu](readme-assets\lighthouse\menu-lighthouse-mobile.png) |
-| Register | ![Register](readme-assets\lighthouse\register-lighthouse-mobile.png) |
-| Login | ![Login](readme-assets\lighthouse\login-lighthouse-mobile.png) |
-| My Bookings | ![My Bookings](readme-assets\lighthouse\my-bookings-lighthouse-mobile.png) |
-| Book a Table | ![Book a Table](readme-assets\lighthouse\book-a-table-lighthouse-mobile.png) |
-| Book for Customer | ![Book for Customer](readme-assets\lighthouse\book-for-customer-lighthouse-mobile.png) |
-| Dashboard (staff/admin only) | ![Dashboard](readme-assets\lighthouse\dashboard-lighthouse-mobile.png) |
-| Logout | ![Logout](readme-assets\lighthouse\logout-lighthouse-mobile.png) |
+| Home page | ![Home Page](readme-assets/lighthouse/homepage-lighthouse-mobile.png) |
+| Menu | ![Menu](readme-assets/lighthouse/menu-lighthouse-mobile.png) |
+| Register | ![Register](readme-assets/lighthouse/register-lighthouse-mobile.png) |
+| Login | ![Login](readme-assets/lighthouse/login-lighthouse-mobile.png) |
+| My Bookings | ![My Bookings](readme-assets/lighthouse/my-bookings-lighthouse-mobile.png) |
+| Book a Table | ![Book a Table](readme-assets/lighthouse/book-a-table-lighthouse-mobile.png) |
+| Book for Customer | ![Book for Customer](readme-assets/lighthouse/book-for-customer-lighthouse-mobile.png) |
+| Dashboard (staff/admin only) | ![Dashboard](readme-assets/lighthouse/dashboard-lighthouse-mobile.png) |
+| Logout | ![Logout](readme-assets/lighthouse/logout-lighthouse-mobile.png) |
 
 ### Accessibility Testing
 
