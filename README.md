@@ -288,6 +288,30 @@ A Category can have many MenuItem entries, and a MenuItem belongs to one Categor
 
 ### Wireframes
 
+| Page | Mobile Wireframes |
+| --- | --- |
+| Home page | ![Home page](readme-assets/wireframes/homepage-wireframe-mobile.png) |
+| Menu | ![Menu](readme-assets/wireframes/menu-wireframes-mobile.png) |
+| Register | ![Register](readme-assets/wireframes/signup-wireframe-mobile.png) |
+| Login | ![Login](readme-assets/wireframes/signin-wireframe-mobile.png) |
+| My Bookings | ![My Bookings](readme-assets/wireframes/my-bookings-wireframe-mobile.png) |
+| Book a Table | ![Book a Table](readme-assets/wireframes/book-table-wireframe-mobile.png) |
+| Book for Customer | ![Book for Customer](readme-assets/wireframes/book-for-customer-wireframe-mobile.png) |
+| Dashboard (staff/admin only) | ![Dashboard](readme-assets/wireframes/dashboard-wireframe-mobile.png) |
+| Logout | ![Logout](readme-assets\wireframes\signout-wireframe-mobile.png) |
+
+| Page | Desktop Wireframes |
+| --- | --- |
+| Home page | ![Home page](readme-assets/wireframes/homepage-wireframe-desktop.png) |
+| Menu | ![Menu](readme-assets/wireframes/menu-wireframe-desktop.png) |
+| Register | ![Register](readme-assets/wireframes/signup-wireframe-desktop.png) |
+| Login | ![Login](readme-assets/wireframes/signin-wireframe-desktop.png) |
+| My Bookings | ![My Bookings](readme-assets/wireframes/my-bookings-wireframe-desktop.png) |
+| Book a Table | ![Book a Table](readme-assets/wireframes/book-table-wireframe-desktop.png) |
+| Book for Customer | ![Book for Customer](readme-assets/wireframes/book-for-customer-wireframe-desktop.png) |
+| Dashboard (staff/admin only) | ![Dashboard](readme-assets/wireframes/dashboard-wireframe-desktop.png) |
+| Logout | ![Logout](readme-assets/wireframes/signout-wireframe-desktop.png) |
+
 
 ## Surface Plane
 
@@ -342,70 +366,132 @@ To optimize the image for the website and improve loading times for users, I use
 1. Landing Page with Hero Section
     * Visually engaging hero image.
     * Welcome message and CTA button ("Book a Table").
+    ![landing page](readme-assets/features/landing-page.png)
+    ![hero image](readme-assets/features/hero-image.png)
+    ![welcome message and CTA button](readme-assets/features/welcome-message-cta-button.png)
 
 2. Responsive Navigation Bar with Role-Based Links
     * Dynamic links based on authentication and user role.
     * Brand logo styled with Italian flag colors.
     * Staff and customers see different navigation items dynamically.
+    ![Role-based navigation for desktop](readme-assets/features/role-based-navigation-desktop.png)
+    ![]()
+    ![]()
+    ![]()
 
 3. User Registration (Sign Up)
     * Create an account via Django Allauth.
     * Email and password fields with secure validation.
     * Custom styling to align with the restaurant branding.
     * Email verification disabled for fast testing during development.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 4. User Authentication (Login)
     * Log in securely with email and password.
     * Error messages for incorrect credentials.
     * "Remember Me" checkbox with custom green tick styling.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 5. Log Out Functionality
     * Secure logout route.
     * Session cleared on sign out.
     * Clean redirect
     * Django styling confirmation message removed for clarity.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 6. Book a Table (Customer)
     * Customers can book tables for specific date, time, and guest count.
     * Real-time availability based on party size and existing bookings.
     * Confirmation email sent after successful booking.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 7. Edit Booking
     * Customers can edit date, time, number of guests, or special request.
     * Booking availability checks again before saving.
     * Updated booking confirmation message displayed.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 8. Cancel Booking
     * Customers can cancel upcoming bookings via a confirmation modal.
     * Cancellations remove the booking from availability.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 9. Success confirmation messages for booking actions
     * Users and staff receive clear success messages after creating, editing, or cancelling a booking. Enhances user experience by confirming that their action was successful.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 10. My Bookings; Customer Dashboard 
     * View upcoming bookings and booking history in two collapsible accordion sections
     * Edit or cancel upcoming reservations.
     * Responsive accordion-style UI for easy toggling.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 11. Staff Dashboard
     * Staff can view all upcoming bookings in a table layout.
     * Filter bookings by date, time, or customer name.
     * Edit or cancel any booking on behalf of customers.
     * Cancellation includes providing a reason and sending a confirmation email.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 12. Create Booking on Behalf of Customer (Staff Only)
     * Staff can select a customer from a dropdown.
     * Booking behaves the same as customer booking form.
     * Confirmation success message to staff and confirmation email sent to selected customer.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 13. Defensive Design with Confirmation Modals
     * Booking cancellations require user confirmation via Bootstrap modal.
     * Customers confirm before canceling their own reservations.
     * Staff confirm and provide cancellation reasons before canceling bookings.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 14. Menu Display Page
     * Fully structured menu with categories, prices, and descriptions.
     * Responsive card layout styled with Bootstrap.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 15. Email Notifications
     * Confirmation email sent after successful booking.
@@ -417,12 +503,27 @@ To optimize the image for the website and improve loading times for users, I use
             - Note: Due to Heroku's free tier limitations, background tasks aren't scheduled automatically in production.
             - Manual command required: `python manage.py runcrons`
             - For full automation, an external scheduler (like Heroku Scheduler) is needed (not included in this version).
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 16. Custom Styling with Bootstrap and CSS inspired by the Italian flag colors (green, white, red).
+
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 17. Mobile-First & Responsive Design
     * All views optimized for mobile, tablet, and desktop.
     * Buttons, modals, and tables adjust layout for all screen sizes.
+    ![]()
+    ![]()
+    ![]()
+    ![]()
+    ![]()
 
 
 ## Accessibility

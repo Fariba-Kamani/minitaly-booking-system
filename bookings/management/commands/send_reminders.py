@@ -28,7 +28,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         now = timezone.now()
-        print(f"Now: {now}")
 
         # Calculate the exact time 24 hours from now
         reminder_time = now + timedelta(days=1)
@@ -36,10 +35,6 @@ class Command(BaseCommand):
         # Extract target date and hour (rounded to the hour)
         reminder_date = reminder_time.date()
         reminder_hour = reminder_time.time().replace(minute=0, second=0, microsecond=0)
-
-        print(f"Reminder time target: {reminder_time}")
-        print(f"Reminder date: {reminder_date}")
-        print(f"Reminder hour: {reminder_hour}")
 
         # Query bookings that match the reminder window
         bookings = Booking.objects.filter(
@@ -50,14 +45,7 @@ class Command(BaseCommand):
             is_cancelled=False
         )
 
-        print(f"Found bookings: {bookings.count()}")
-
         for booking in bookings:
-            print(
-                f"Booking: {booking.user.username}, {booking.date} at {booking.time}, "
-                f"reminder={booking.send_reminder}, cancelled={booking.is_cancelled}"
-            )
-
             user = booking.user
             email = user.email
 

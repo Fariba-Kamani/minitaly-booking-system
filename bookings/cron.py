@@ -8,5 +8,5 @@ class SendReminderEmailsCronJob(CronJobBase):
     code = 'bookings.send_reminders_cron'  # unique identifier
 
     def do(self):
-        print("Running SendReminderEmailsCronJob...")
+        
         Command().handle()

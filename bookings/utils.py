@@ -54,7 +54,7 @@ def get_available_time_slots(date, num_guests):
 
     Returns:
         list of dict: Each dict contains a time and a boolean indicating availability.
-                      e.g. [{'time': 17:00, 'available': True}, ...]
+        ex. [{'time': 17:00, 'available': True}, ...]
     """
     all_slots = generate_time_slots(date)
     bookings = Booking.objects.filter(date=date)

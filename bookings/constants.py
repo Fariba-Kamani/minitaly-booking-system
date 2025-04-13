@@ -16,7 +16,7 @@ OPERATING_HOURS = {
     'start': time(17, 0),   # Restaurant opens at 17:00 (5 PM)
     'end': time(22, 0),     # Last booking slot is 22:00 (10 PM)
     'interval': timedelta(hours=1),  # Time slots are spaced 1 hour apart
-    'sitting_duration': timedelta(hours=2),  # Each party can stay up to 2 hours
+    'sitting_duration': timedelta(hours=1),  # Each party can stay 1 hour
 }
 
 # Table availability by size (capacity: number of tables)
