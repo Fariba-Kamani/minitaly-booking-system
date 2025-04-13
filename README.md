@@ -1,6 +1,6 @@
 # minItaly Booking System
 
-![minItaly Booking System](image)
+![minItaly Booking System](readme-assets\images\responsive-mockup.png)
 
 Welcome to Minitaly, a stylish and intuitive restaurant booking platform built with Django. Designed to offer a smooth experience for both customers and staff, it allows users to book, manage, and cancel reservations while providing staff with administrative tools and a real-time dashboard.
 
@@ -38,6 +38,7 @@ Visit the deployed site: [minItaly](https://minitaly-booking-system-de8b5948572a
   * [Local Development](#local-development)
   * [How to Fork](#how-to-fork)
   * [How to Clone](#how-to-clone)
+    * [Background Tasks & Reminder Emails](#background-tasks--reminder-emails)
 * [Testing](#testing)
   * [Solved Bugs](#solved-bugs)
   * [Known Bugs](#known-bugs)
@@ -245,6 +246,7 @@ Below are the Entity Relationship Diagrams (ERDs) represented in table format, o
     | is_cancelled | BooleanField | default=False |
     | cancellation_reason | TextField | blank=True, null=True |
     | send_reminder | BooleanField | default=True |
+    | reminder_sent | BooleanField | default=False |
 
 * Category (Menu)
     | Field | Type | Attributes |
@@ -409,6 +411,12 @@ To optimize the image for the website and improve loading times for users, I use
     * Confirmation email sent after successful booking.
     * Cancellation email sent when a reservation is cancelled.
     * Optional booking reminder 24 hours before reservation (if enabled).
+        * **Automated Reminder Emails**
+            - Customers who opt-in receive an email reminder 24 hours before their reservation.
+            - Handled via `django-cron` in development.
+            - Note: Due to Heroku's free tier limitations, background tasks aren't scheduled automatically in production.
+            - Manual command required: `python manage.py runcrons`
+            - For full automation, an external scheduler (like Heroku Scheduler) is needed (not included in this version).
 
 16. Custom Styling with Bootstrap and CSS inspired by the Italian flag colors (green, white, red).
 
@@ -499,33 +507,33 @@ These steps aim to create a smooth experience for all users, including those usi
 
 ### Deployment
 
-This project is deployed on Heroku using a PostgreSQL database provided by Code Institute’s PostgreSQL service. Below are the steps taken to prepare and deploy the project.
+This project is deployed on [Heroku](https://dashboard.heroku.com/) using a PostgreSQL database provided by [Code Institute’s PostgreSQL service](https://dbs.ci-dbs.net/). Below are the steps taken to prepare and deploy the project.
 
 * **Setup PostgreSQL Database**
 
-    1. Go to the PostgreSQL from Code Institute portal.
+1. Go to the PostgreSQL from Code Institute portal.
 
-    2. Enter your Code Institute student email and click Submit.
+2. Enter your Code Institute student email and click Submit.
 
-    3. Wait until the database is created and check your email inbox for the database URL.
+3. Wait until the database is created and check your email inbox for the database URL.
 
-    4. In your Django project, create a file called `env.py` at the root level.
+4. In your Django project, create a file called `env.py` at the root level.
 
-    5. Add the following inside `env.py`:
-        ```
-        python
+5. Add the following inside `env.py`:
+     ```
+    python
 
-        import os
+    import os
 
-        os.environ.setdefault("DATABASE_URL", "<your-db-url-here>") 
-        ```
-    6. Add `env.py` to your `.gitignore` to keep it private:
-        ```
-        bash
+    os.environ.setdefault("DATABASE_URL", "<your-db-url-here>") 
+    ```
+6. Add `env.py` to your `.gitignore` to keep it private:
+    ```
+    bash
 
-        echo "env.py" >> .gitignore
+    echo "env.py" >> .gitignore
 
-        ```
+    ```
 * **Install PostgreSQL Requirements**
 
     In the terminal, install the required packages:
@@ -582,6 +590,54 @@ This project is deployed on Heroku using a PostgreSQL database provided by Code 
 
     ```
 
+    For security and portability, sensitive credentials should be stored in a `.env` file at the root of your project and never pushed to GitHub.
+
+    Create a `.env` file in your project root (if it doesn't already exist):
+
+    ```
+    bash
+
+    touch .env
+    
+    ```
+
+    Add your secret credentials to `.env`:
+
+    ```
+    env
+
+    DATABASE_URL=your-postgresql-db-url
+    SECRET_KEY=your-django-secret-key
+    EMAIL_HOST_USER=your-gmail-address
+    EMAIL_HOST_PASSWORD=your-app-password
+    
+    ```
+
+    Ensure `.env` is ignored by Git:
+
+    Open `.gitignore` and make sure it includes the following line:
+
+    ```
+    gitignore
+
+    .env
+    
+    ```
+    This keeps your credentials secure and out of version control.
+
+    Load environment variables in `settings.py`:
+
+    Make sure you have the following in your `settings.py` to load the `.env` file:
+
+    ```
+    python
+
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    
+    ```
+
     Add the following config vars in your Heroku dashboard:
 
     | Key | Value |
@@ -593,50 +649,168 @@ This project is deployed on Heroku using a PostgreSQL database provided by Code 
 
 * **Final Heroku Setup**
 
-    1. In your terminal:
+1. In your terminal:
 
-        ```
-        bash
+    ```
+    bash
 
-        pip3 install gunicorn
-        pip3 freeze > requirements.txt
+    pip3 install gunicorn
+    pip3 freeze > requirements.txt
 
-        ```
+    ```
     
-    2. Add a `Procfile` to the root directory:
+2. Add a `Procfile` to the root directory:
 
-       ```
-       Procfile
+    ```
+    Procfile
 
-       web: gunicorn minitaly.wsgi:application
+    web: gunicorn minitaly.wsgi:application
 
-       ``` 
-    3. Run `collectstatic` to gather all static assets:
+    ``` 
+3. Run `collectstatic` to gather all static assets:
 
-        ```
-        bash
+    ```
+    bash
 
-        python3 manage.py collectstatic
+    python3 manage.py collectstatic
 
-        ```
+    ```
     
-    4. Set `DEBUG = False` in minitaly/settings.py, and update:
+4. Set `DEBUG = False` in minitaly/settings.py, and update:
 
-        ```
-        python
+    ```
+    python
 
-        ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'minitaly-booking-system-de8b5948572a.herokuapp.com']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'minitaly-booking-system-de8b5948572a.herokuapp.com']
 
-        ```
+    ```
     
-    5. Push changes to GitHub, then deploy from the Heroku dashboard.
+5. Push changes to GitHub, then deploy from the Heroku dashboard.
 
 
 ### Local Development
+
+To run the Minitaly project locally:
+
+1. Clone the repository (see [How to Clone](#how-to-clone) section).
+
+2. Install dependencies:
+
+```
+bash
+
+pip install -r requirements.txt
+
+```
+
+3. Create an `env.py` file at the root of your project to store sensitive variables:
+
+```
+python
+
+import os
+
+os.environ.setdefault("DATABASE_URL", "<your-db-url>")
+os.environ.setdefault("SECRET_KEY", "<your-secret-key>")
+os.environ.setdefault("EMAIL_HOST_USER", "<your-gmail>")
+os.environ.setdefault("EMAIL_HOST_PASSWORD", "<your-app-password>")
+
+```
+
+4. Ensure `env.py` is added to `.gitignore` to keep your credentials safe.
+
+5. Apply migrations:
+
+```
+bash
+
+python manage.py migrate
+
+```
+
+6. Create a superuser:
+
+```
+bash
+
+python manage.py createsuperuser
+
+```
+
+7. Start the development server:
+
+```
+bash
+
+python manage.py runserver
+
+```
+
+
 ### How to Fork
+
+To create your own copy of this repository:
+
+1. Log in to [GitHub](https://github.com/).
+
+2. Navigate to the [Minitaly Repository](https://github.com/Fariba-Kamani/minitaly-booking-system).
+
+3. Click the Fork button at the top-right corner.
+
+4. This creates a copy under your own GitHub account.
+
+
 ### How to Clone
 
+To clone the repository to your local machine:
+
+1. On your forked repo, click the green Code button.
+
+2. Copy the URL under HTTPS.
+
+3. Open your terminal and navigate to the directory where you want the project.
+
+4. Run the following command:
+
+```
+bash
+
+git clone https://github.com/<your-username>/minitaly-booking-system.git
+
+```
+
+5. Change into the project directory:
+
+```
+bash
+
+cd minitaly-booking-system
+
+```
+
+#### Background Tasks & Reminder Emails
+
+Reminder emails are managed by `django-cron`. Due to limitations of Heroku’s free tier (which doesn’t support persistent background tasks), reminders are **not sent automatically**.
+
+To send them in production:
+
+- Run manually:
+
+  ```
+  bash
+
+  python manage.py runcrons
+
+  ```
+
+- Or use a third-party service like Heroku Scheduler (this may require a paid plan).
+
+This limitation is clearly explained in the README under the Deployment and Features sections.
+
 ## Testing
+
+Please refer to [TESTING.md](TESTING.md) file for all testing carried out.
+
 ### Solved Bugs
 ### Known Bugs
 

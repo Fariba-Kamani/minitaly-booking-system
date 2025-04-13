@@ -137,7 +137,7 @@ h1, h2, h3, h4, h5, h6, .display-4, p {
   /* login.html, logout.html, and signup.html */
 
   .link {
-    color: #009246; 
+    color: #01351a; 
   }
 
   .link:hover {
@@ -149,15 +149,15 @@ h1, h2, h3, h4, h5, h6, .display-4, p {
   }
 
   .btn-signup {
-    background-color: #009246; 
-    color: white;
+    background-color: white;
+    color: black;
+    border: 1px solid #009246;
     margin-bottom: 2rem;
-    border: none;
   }
   
   .btn-signup:hover {
     background-color: #afeecd; /* light green on hover */
-    color: black;
+    
   }
   
   /* Footer */
