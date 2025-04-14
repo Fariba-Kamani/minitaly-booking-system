@@ -41,11 +41,7 @@ Visit the deployed site: [minItaly](https://minitaly-booking-system-de8b5948572a
     * [Background Tasks & Reminder Emails](#background-tasks--reminder-emails)
 * [Testing](#testing)
   * [Solved Bugs](#solved-bugs)
-  * [Known Bugs](#known-bugs)
-* [Credits](#credits)
-  * [Code Used](#code-used)
-  * [Content](#content)
-  * [Acknowledgments](#acknowledgments)
+* [Credits & Acknowledgments](#credits--acknowledgments)
 
 - - -
 
@@ -366,132 +362,134 @@ To optimize the image for the website and improve loading times for users, I use
 1. Landing Page with Hero Section
     * Visually engaging hero image.
     * Welcome message and CTA button ("Book a Table").
-    ![landing page](readme-assets/features/landing-page.png)
-    ![hero image](readme-assets/features/hero-image.png)
-    ![welcome message and CTA button](readme-assets/features/welcome-message-cta-button.png)
+    ![landing-page-with-hero-section.png](readme-assets/features/1-landing-page-with-hero-section.png)
+    ![visually-engaging-hero-image.png](readme-assets/features/1-1-visually-engaging-hero-image.png)
+    ![welcome-message-and-cta-button-book-a-table.png](readme-assets/features/1-2-welcome-message-and-cta-button-book-a-table.png)
+    
 
 2. Responsive Navigation Bar with Role-Based Links
     * Dynamic links based on authentication and user role.
     * Brand logo styled with Italian flag colors.
     * Staff and customers see different navigation items dynamically.
-    ![Role-based navigation for desktop](readme-assets/features/role-based-navigation-desktop.png)
-    ![]()
-    ![]()
-    ![]()
+
+    ![responsive-navigation-bar-with-role-based-links.png](readme-assets/features/2-responsive-navigation-bar-with-role-based-links.png)
+    ![dynamic-links-based-on-authentication-and-user-role-user.png](readme-assets/features/2-1-1-dynamic-links-based-on-authentication-and-user-role-user.png)
+    ![dynamic-links-based-on-authentication-and-user-role-admin.png](readme-assets/features/2-1-2-dynamic-links-based-on-authentication-and-user-role-admin.png)
+    ![brand-logo-styled-with-italian-flag-colors.png](readme-assets/features/2-2-brand-logo-styled-with-italian-flag-colors.png)
+    
 
 3. User Registration (Sign Up)
     * Create an account via Django Allauth.
     * Email and password fields with secure validation.
     * Custom styling to align with the restaurant branding.
     * Email verification disabled for fast testing during development.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![user-registration-sign-up.png](readme-assets/features/3-user-registration-sign-up.png)
+    ![create-an-account-via-django-allauth.png](readme-assets/features/3-1-create-an-account-via-django-allauth.png)
+    ![email-and-password-fields-with-secure-validation-please-fill-field.png](readme-assets/features/3-2-1-email-and-password-fields-with-secure-validation-please-fill-field.png)
+    ![](readme-assets/features/3-2-2-email-and-password-fields-with-secure-validation-enter-valid-user-name.png)
+    ![email-and-password-fields-with-secure-validation-include-at-sign.png](readme-assets/features/3-2-3-email-and-password-fields-with-secure-validation-include-at-sign.png)
+    ![email-and-password-fields-with-secure-validation-password-comments.png](readme-assets/features/3-2-4-email-and-password-fields-with-secure-validation-password-comments.png)
+    ![email-and-password-fields-with-secure-validation-repeat-password.png](readme-assets/features/3-2-5-email-and-password-fields-with-secure-validation-repeat-password.png)
+    
 
 4. User Authentication (Login)
     * Log in securely with email and password.
     * Error messages for incorrect credentials.
     * "Remember Me" checkbox with custom green tick styling.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![user-authentication-login.png](readme-assets/features/4-user-authentication-login.png)
+    ![log-in-securely-with-email-and-password.png](readme-assets/features/4-1-log-in-securely-with-email-and-password.png)
+    ![error-messages-for-incorrect-credentials.png](readme-assets/features/4-2-error-messages-for-incorrect-credentials.png)
+    ![remember-me-checkbox-with-custom-green-tick-styling.pn](readme-assets/features/4-3-remember-me-checkbox-with-custom-green-tick-styling.png)
 
 5. Log Out Functionality
     * Secure logout route.
     * Session cleared on sign out.
     * Clean redirect
     * Django styling confirmation message removed for clarity.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![log-out-functionality.png](readme-assets/features/5-log-out-functionality.png)
+    ![session-cleared-on-sign-out-logged-in.png](readme-assets/features/5-2-1-session-cleared-on-sign-out-logged-in.png)
+    ![session-cleared-on-sign-out-logged-out.png](readme-assets/features/5-2-2-session-cleared-on-sign-out-logged-out.png)
 
 6. Book a Table (Customer)
     * Customers can book tables for specific date, time, and guest count.
     * Real-time availability based on party size and existing bookings.
     * Confirmation email sent after successful booking.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![book-a-table-customer](readme-assets/features/6-book-a-table-customer.png)
+    ![customers-can-book-tables-for-specific-date-time-and-guest-count](readme-assets/features/6-1-customers-can-book-tables-for-specific-date-time-and-guest-count.png)
+    ![real-time-availability-based-on-party-size-and-existing-bookings-first-booking](readme-assets/features/6-2-1-real-time-availability-based-on-party-size-and-existing-bookings-first-booking.png)
+    ![real-time-availability-based-on-party-size-and-existing-bookings-tables-booked](readme-assets/features/6-2-1-real-time-availability-based-on-party-size-and-existing-bookings-tables-booked.png)
+    ![confirmation-email-sent-after-successful-booking](readme-assets/features/6-3-confirmation-email-sent-after-successful-booking.png)
+    ![reminder-checkbox](readme-assets/features/6-999-reminder-checkbox.png)
 
 7. Edit Booking
     * Customers can edit date, time, number of guests, or special request.
     * Booking availability checks again before saving.
     * Updated booking confirmation message displayed.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![edit-booking](readme-assets/features/7-edit-booking.png)
+    ![customers-can-edit-date-time-number-of-guests-or-special-request](readme-assets/features/7-1-customers-can-edit-date-time-number-of-guests-or-special-request.png)
+    ![booking-availability-checks-again-before-saving](readme-assets/features/7-2-booking-availability-checks-again-before-saving.png)
+    ![booking-availability-checks-again-before-saving](readme-assets/features/7-3-booking-availability-checks-again-before-saving.png)
 
 8. Cancel Booking
     * Customers can cancel upcoming bookings via a confirmation modal.
     * Cancellations remove the booking from availability.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![cancel-booking](readme-assets/features/8-cancel-booking.png)
+    ![customers-can-cancel-upcoming-bookings-via-a-confirmation-modal-modal](readme-assets/features/8-1-1-customers-can-cancel-upcoming-bookings-via-a-confirmation-modal-modal.png)
+    ![customers-can-cancel-upcoming-bookings-via-a-confirmation-modal-success-message](readme-assets/features/8-1-2-customers-can-cancel-upcoming-bookings-via-a-confirmation-modal-success-message.png)
+    ![cancellations-remove-the-booking-from-availability](readme-assets/features/8-2-cancellations-remove-the-booking-from-availability.png)
+    ![success-cancellation-email](readme-assets/features/8-1-3-customers-can-cancel-upcoming-bookings-via-a-confirmation-modal-success-cancellation-email.png)
 
 9. Success confirmation messages for booking actions
     * Users and staff receive clear success messages after creating, editing, or cancelling a booking. Enhances user experience by confirming that their action was successful.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![success-confirmation-messages-for-booking-actions](readme-assets/features/9-success-confirmation-messages-for-booking-actions.png)
 
 10. My Bookings; Customer Dashboard 
     * View upcoming bookings and booking history in two collapsible accordion sections
     * Edit or cancel upcoming reservations.
     * Responsive accordion-style UI for easy toggling.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![my-bookings-customer-dashboard](readme-assets/features/10-my-bookings-customer-dashboard.png)
+    ![view-upcoming-bookings-and-booking-history-in-two-collapsible-accordion-sections](readme-assets/features/10-1-view-upcoming-bookings-and-booking-history-in-two-collapsible-accordion-sections.png)
+    ![edit-or-cancel-upcoming-reservations](readme-assets/features/10-2-edit-or-cancel-upcoming-reservations.png)
 
 11. Staff Dashboard
     * Staff can view all upcoming bookings in a table layout.
     * Filter bookings by date, time, or customer name.
     * Edit or cancel any booking on behalf of customers.
     * Cancellation includes providing a reason and sending a confirmation email.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![staff-dashboard](readme-assets/features/11-staff-dashboard.png)
+    ![staff-can-view-all-upcoming-bookings-in-a-table-layout](readme-assets/features/11-1-staff-can-view-all-upcoming-bookings-in-a-table-layout.png)
+    ![filter-bookings-by-date-time-or-customer-name](readme-assets/features/11-2-filter-bookings-by-date-time-or-customer-name.png)
+    ![edit-or-cancel-any-booking-on-behalf-of-customers](readme-assets/features/11-3-edit-or-cancel-any-booking-on-behalf-of-customers.png)
+    ![cancellation-includes-providing-a-reason-and-sending-a-confirmation-email](readme-assets/features/11-4-cancellation-includes-providing-a-reason-and-sending-a-confirmation-email.png)
 
 12. Create Booking on Behalf of Customer (Staff Only)
     * Staff can select a customer from a dropdown.
     * Booking behaves the same as customer booking form.
     * Confirmation success message to staff and confirmation email sent to selected customer.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![create-booking-on-behalf-of-customer-staff-only](readme-assets/features/12-create-booking-on-behalf-of-customer-staff-only.png)
+    ![staff-can-select-a-customer-from-a-dropdown](readme-assets/features/12-1-staff-can-select-a-customer-from-a-dropdown.png)
+    ![staff-can-select-a-customer-from-a-dropdown-error-message](readme-assets/features/12-1-1-staff-can-select-a-customer-from-a-dropdown-error-message.png)
+    ![staff-can-select-a-customer-from-a-dropdown-date-in-the-past](readme-assets/features/12-1-2-staff-can-select-a-customer-from-a-dropdown-date-in-the-past.png)
+    ![booking-behaves-the-same-as-customer-booking-form](readme-assets/features/12-2-booking-behaves-the-same-as-customer-booking-form.png)
+    ![confirmation-success-message-to-staff-and-confirmation-email-sent-to-selected-customer-confirmation-screen-message](readme-assets/features/12-3-1-confirmation-success-message-to-staff-and-confirmation-email-sent-to-selected-customer-confirmation-screen-message.png)
+    ![confirmation-success-message-to-staff-and-confirmation-email-sent-to-selected-customer-confirmation-email-customer](readme-assets/features/12-3-2-confirmation-success-message-to-staff-and-confirmation-email-sent-to-selected-customer-confirmation-email-customer.png)
 
 13. Defensive Design with Confirmation Modals
     * Booking cancellations require user confirmation via Bootstrap modal.
     * Customers confirm before canceling their own reservations.
     * Staff confirm and provide cancellation reasons before canceling bookings.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![defensive-design-with-confirmation-modals-version-a](readme-assets/features/13-defensive-design-with-confirmation-modals-version-a.png)
+    ![defensive-design-with-confirmation-modals-version-b](readme-assets/features/13-defensive-design-with-confirmation-modals-version-b.png)
+    ![customers-confirm-before-canceling-their-own-reservations](readme-assets/features/13-2-customers-confirm-before-canceling-their-own-reservations.png)
+    ![staff-confirm-and-provide-cancellation-reasons-before-canceling-bookings](readme-assets/features/13_3-staff-confirm-and-provide-cancellation-reasons-before-canceling-bookings.png)
 
 14. Menu Display Page
     * Fully structured menu with categories, prices, and descriptions.
     * Responsive card layout styled with Bootstrap.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+    ![menu-display-page](readme-assets/features/14-menu-display-page.png)
+    ![fully-structured-menu-with-categories-prices-and-descriptions](readme-assets/features/14-1-fully-structured-menu-with-categories-prices-and-descriptions.png)
+    ![responsive-card-layout-styled-with-bootstrap](readme-assets/features/14-2-responsive-card-layout-styled-with-bootstrap.png)
+    
 
 15. Email Notifications
     * Confirmation email sent after successful booking.
@@ -503,28 +501,13 @@ To optimize the image for the website and improve loading times for users, I use
             - Note: Due to Heroku's free tier limitations, background tasks aren't scheduled automatically in production.
             - Manual command required: `python manage.py runcrons`
             - For full automation, an external scheduler (like Heroku Scheduler) is needed (not included in this version).
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
+
 
 16. Custom Styling with Bootstrap and CSS inspired by the Italian flag colors (green, white, red).
-
-    ![]()
-    ![]()
-    ![]()
-    ![]()
 
 17. Mobile-First & Responsive Design
     * All views optimized for mobile, tablet, and desktop.
     * Buttons, modals, and tables adjust layout for all screen sizes.
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-    ![]()
-
 
 ## Accessibility
 
@@ -582,7 +565,7 @@ These steps aim to create a smooth experience for all users, including those usi
 
 - **[Git](https://git-scm.com/)** – Version control
 - **[GitHub](https://github.com/)** – Code hosting and collaboration
-- **[GitPod](https://gitpod.io/)** / **VS Code** – IDEs used during development
+- **[Gitpod](https://gitpod.io/)** / **VS Code** – IDEs used during development
 - **[Chrome DevTools](https://developer.chrome.com/docs/devtools/)** – Inspect and debug frontend
 - **[Balsamiq](https://balsamiq.com/)** – Wireframes
 
@@ -591,16 +574,14 @@ These steps aim to create a smooth experience for all users, including those usi
 
 - **[Favicon Generator](https://realfavicongenerator.net/)** – Generate favicon icons
 - **[Image Resizer](https://imageresizer.com/)** – Compress and resize images
-- **[Am I Responsive?](http://ami.responsivedesign.is/)** – Mockup screenshots on multiple devices
-
 
 ### Validation & Testing Tools
 
 - **[W3C Validator](https://validator.w3.org/)** – HTML validation
 - **[Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/)** – CSS validation
 - **[JSHint](https://jshint.com/)** – JavaScript linting
+- **[Code Institute CI Python Linter](https://pep8ci.herokuapp.com/)**
 - **[WAVE](https://wave.webaim.org/)** – Web accessibility evaluation
-- **[Responsive Design Checker](https://responsivedesignchecker.com/)** – Responsive layout testing
 - **[Lighthouse](https://developers.google.com/web/tools/lighthouse/)** – Performance, accessibility, and SEO audits
 
 
@@ -746,7 +727,7 @@ This project is deployed on [Heroku](https://dashboard.heroku.com/) using a Post
     | DATABASE_URL       | Your PostgreSQL URL       |
     | SECRET_KEY         | Your Django secret key    |
     | EMAIL_HOST_USER    | Gmail email address       |
-    | EMAIL_HOST_PASSWORD | Gmail App password        |
+    | EMAIL_HOST_PASSWORD | Gmail App password       |
 
 * **Final Heroku Setup**
 
@@ -913,10 +894,22 @@ This limitation is clearly explained in the README under the Deployment and Feat
 Please refer to [TESTING.md](TESTING.md) file for all testing carried out.
 
 ### Solved Bugs
-### Known Bugs
 
-## Credits
-### Code Used
-### Content
-### Acknowledgments
+Throughout development, several bugs were identified and resolved to ensure a smooth user experience. Key fixes included: improving role-based logic in the navigation bar (e.g., hiding customer-only links from staff users), excluding cancelled bookings from staff views, and resolving booking edit issues caused by inconsistent date/time formatting between JavaScript and Django. Time and date inputs were normalized to avoid validation errors on unchanged form submissions. All fixes were tracked via commits and thoroughly tested after resolution.
+
+## Credits & Acknowledgments
+
+Code Institute – For providing the Full-Stack curriculum, project structure, and valuable support throughout the course.
+
+[Code Institute’s "I Think Therefore I Blog" Walkthrough Project](https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+FSD101_WTS+7/courseware/713441aba05441dfb3a7cf04f3268b3f/824fccecd0fe4e44871eeabcbf69d830/) – Used as a learning reference throughout development. Helped structure Django views, templates, forms, and implement Bootstrap-based styling and layout patterns effectively.
+
+My Mentor – For feedback, encouragement, and help during development.
+
+ChatGPT (by OpenAI) – For providing guidance, and help with debugging and documentation during the project.
+
+Open-source Communities – For shared solutions, especially from Stack Overflow and the Django Discord/Forum.
+
+Anyone who contributed inspiration, troubleshooting tips, or guidance during the project.
+
+
 
