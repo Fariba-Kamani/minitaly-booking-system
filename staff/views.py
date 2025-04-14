@@ -3,7 +3,8 @@ staff/views.py
 
 Defines views for staff/admin users to manage restaurant bookings.
 
-All views are protected with `user_passes_test(lambda u: u.is_staff)` to restrict access to staff users only.
+All views are protected with `user_passes_test(lambda u: u.is_staff)`
+to restrict access to staff users only.
 
 Includes:
 - Dashboard view with filtering
@@ -89,7 +90,9 @@ class StaffBookingUpdateView(UpdateView):
         # Enforce original customer assignment, even if tampering attempted
         form.instance.user = self.get_object().user
         staff_name = self.request.user.username
-        messages.success(self.request, f"Booking updated successfully by staff: {staff_name}.")
+        messages.success(
+                self.request,
+                f"Booking updated successfully by staff: {staff_name}.")
         return super().form_valid(form)
 
 
@@ -116,17 +119,34 @@ class StaffBookingDeleteView(DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.is_cancelled = True
-        self.object.cancellation_reason = request.POST.get("cancellation_reason", "")
+        self.object.cancellation_reason = request.POST.get(
+            "cancellation_reason", "")
         self.object.save()
 
         # Send cancellation email to customer
         send_mail(
             subject='Your booking has been cancelled',
-            message=f"Dear {self.object.user.first_name or self.object.user.username},\n\n"
-                    f"Your booking on {self.object.date} at {self.object.time.strftime('%H:%M')} has been cancelled.\n"
-                    f"Reason: {self.object.cancellation_reason or 'No reason provided.'}\n\n"
-                    f"If this was a mistake, please contact the restaurant.\n\n"
-                    f"Best regards,\nMinitaly",
+            message=(
+                "Dear "
+                + (
+                    self.object.user.first_name
+                    or self.object.user.username
+                )
+                + ",\n\n"
+                "Your booking on "
+                + f"{self.object.date} at "
+                + f"{self.object.time.strftime('%H:%M')} "
+                + "has been cancelled.\n"
+                "Reason: "
+                + (
+                    f"{self.object.cancellation_reason}"
+                    if self.object.cancellation_reason
+                    else "No reason provided."
+                )
+                + "\n\n"
+                "If this was a mistake, please contact the restaurant.\n\n"
+                "Best regards,\nMinitaly"
+            ),
             from_email=None,
             recipient_list=[self.object.user.email],
             fail_silently=False,
@@ -134,8 +154,10 @@ class StaffBookingDeleteView(DeleteView):
 
         messages.success(
             request,
-            f"Booking cancelled successfully by staff: {request.user.username}."
+            "Booking cancelled successfully by staff: "
+            f"{request.user.username}."
         )
+
         return redirect(self.success_url)
 
 
@@ -155,7 +177,8 @@ class StaffBookingCreateView(CreateView):
     success_url = reverse_lazy('staff_dashboard')
 
     def get_form_kwargs(self):
-        # Pass request into form for potential custom logic (e.g., filtering customers)
+        # Pass request into form for potential custom logic
+        # (ex., filtering customers)
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
@@ -166,13 +189,20 @@ class StaffBookingCreateView(CreateView):
         # Send confirmation email to customer
         send_mail(
             subject="Your booking is confirmed - Minitaly",
-            message=f"Dear {form.instance.user.first_name or form.instance.user.username},\n\n"
-                    f"A booking has been made for you by our staff:\n"
-                    f"Date: {form.instance.date}\n"
-                    f"Time: {form.instance.time.strftime('%H:%M')}\n"
-                    f"Guests: {form.instance.num_guests}\n\n"
-                    f"If you need to make changes, please log in or contact us.\n\n"
-                    f"Best regards,\nMinitaly",
+            message=(
+                "Dear "
+                + (
+                    form.instance.user.first_name
+                    or form.instance.user.username
+                )
+                + ",\n\n"
+                "A booking has been made for you by our staff:\n"
+                f"Date: {form.instance.date}\n"
+                f"Time: {form.instance.time.strftime('%H:%M')}\n"
+                f"Guests: {form.instance.num_guests}\n\n"
+                "To make changes, please log in or contact us.\n\n"
+                "Best regards,\nMinitaly"
+            ),
             from_email=None,
             recipient_list=[form.instance.user.email],
             fail_silently=False,
@@ -180,5 +210,11 @@ class StaffBookingCreateView(CreateView):
 
         customer_name = form.cleaned_data['user'].username
         staff_name = self.request.user.username
-        messages.success(self.request, f"Booking created successfully for {customer_name} by staff: {staff_name}.")
+        messages.success(
+            self.request,
+            (
+                f"Booking created successfully for {customer_name} "
+                f"by staff: {staff_name}."
+            )
+        )
         return response

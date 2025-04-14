@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from collections import defaultdict
 from .constants import TABLE_INVENTORY
 
+
 class BookingForm(forms.ModelForm):
     """
     Form for customers to create or edit a booking.
@@ -17,14 +18,15 @@ class BookingForm(forms.ModelForm):
 
     user = forms.ModelChoiceField(
         queryset=User.objects.filter(is_staff=False),
-        required=False,  # Optional for regular users (auto-assigned), required for staff
+        required=False,  # Optional for regular users, required for staff
         label="Customer",
         help_text="Select a customer (only visible to staff)."
     )
 
     class Meta:
         model = Booking
-        fields = ['user', 'date', 'time', 'num_guests', 'special_request', 'send_reminder']
+        fields = ['user', 'date', 'time', 'num_guests',
+                  'special_request', 'send_reminder']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
@@ -35,7 +37,8 @@ class BookingForm(forms.ModelForm):
         Dynamically removes the `user` field for non-staff users
         to prevent customers from assigning bookings to others.
         """
-        self.request = kwargs.pop('request', None)  # Capture request for access control
+        # Capture request for access control
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
 
         if not self.request or not self.request.user.is_staff:
@@ -52,11 +55,13 @@ class BookingForm(forms.ModelForm):
 
     def clean(self):
         """
-        Custom form-level validation to prevent overbooking based on table inventory.
+        Custom form-level validation to prevent
+        overbooking based on table inventory.
 
         - Ensures the requested number of guests can be seated.
         - Finds the smallest suitable table size for the group.
-        - Blocks booking if all tables of that size are already in use at the requested time.
+        - Blocks booking if all tables of that size are
+          already in use at the requested time.
         """
         cleaned_data = super().clean()
         date = cleaned_data.get('date')
@@ -78,9 +83,11 @@ class BookingForm(forms.ModelForm):
                 return cleaned_data
 
         # Determine the smallest table size that fits this guest count
-        suitable_sizes = sorted(size for size in TABLE_INVENTORY if size >= num_guests)
+        suitable_sizes = sorted(
+                size for size in TABLE_INVENTORY if size >= num_guests)
         if not suitable_sizes:
-            raise ValidationError("Sorry, we can't accommodate that many guests.")
+            raise ValidationError(
+                "Sorry, we can't accommodate that many guests.")
 
         best_fit_size = suitable_sizes[0]
 
@@ -105,7 +112,10 @@ class BookingForm(forms.ModelForm):
                     break
 
         if taken >= TABLE_INVENTORY[best_fit_size]:
-            raise ValidationError("This time slot is fully booked for your party size. Please choose another.")
+            raise ValidationError(
+                    "This time slot is fully booked for your party size. "
+                    "Please choose another."
+            )
 
         return cleaned_data
 

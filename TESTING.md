@@ -36,15 +36,22 @@ Due to a tight deadline, automated testing was not implemented.
 ## AUTOMATED TESTING
 ### HTML Validation
 
-All HTML files were tested using the (W3C Markup Validation Service)[https://validator.w3.org/].
+All HTML files were tested using the (W3C Markup Validation Service)[https://validator.w3.org/]. All validation errors have been resolved. No errors or warnings to show.
 
 ### CSS Validation
 
-CSS was tested using (W3C CSS Validation Service)[https://jigsaw.w3.org/css-validator/]. No critical errors were found.
+CSS was tested using (W3C CSS Validation Service)[https://jigsaw.w3.org/css-validator/]. No errors were found.
 
 ### JavaScript Validation
 
-JavaScript code was checked using [JSHint](https://jshint.com/).
+JavaScript code was checked using [JSHint](https://jshint.com/). No errors were detected. 
+To silence warnings related to ES6 features and undefined global variables, I added the following comment at the top of my `booking_slots.js` file:
+
+ ```
+/* jshint esversion: 6 */
+/* global initialTime, initialDate, initialGuests */
+```
+This explicitly tells JSHint to expect ES6 syntax and recognize the Django template-injected variables as global.
 
 
 ### Python Validation
@@ -92,9 +99,9 @@ Accessibility testing was conducted using [WAVE Web Accessibility Evaluation Too
 | --- | --- |
 | Home page | 0 Errors, 0 Contrast Errors |
 | Menu | 0 Errors, 0 Contrast Errors |
-| Register | 0 Errors, 2 Contrast Errors |
-| Login | 0 Errors, 2 Contrast Errors |
-| Logout | 0 Errors, 2 Contrast Errors |
+| Register | 0 Errors, 0 Contrast Errors |
+| Login | 0 Errors, 0 Contrast Errors |
+| Logout | 0 Errors, 0 Contrast Errors |
 
 Some WAVE alerts (e.g., heading level skips or adjacent links) were deemed low priority for this version but noted for future refinement.
 Unfortunately, it was not possible to test the URLs that require a logged-in customer or staff for accessibility via WAVE. These pages were manually reviewed using dev tools and semantic HTML structure was followed throughout. In future versions, ARIA roles and screen reader testing will be incorporated for improved accessibility.

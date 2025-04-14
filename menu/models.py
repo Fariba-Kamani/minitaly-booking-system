@@ -14,7 +14,7 @@ from django.db import models
 class Category(models.Model):
     """
     Represents a category of menu items (e.g., Starters, Desserts).
-    
+
     Fields:
         name (str): The name of the category.
     """

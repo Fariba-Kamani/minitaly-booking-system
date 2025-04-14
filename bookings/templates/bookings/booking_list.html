@@ -1,16 +1,22 @@
-{% extends 'base.html' %} {% block title %}My Bookings - Minitaly{% endblock %}
+{% extends 'base.html' %}
+{% block title %}My Bookings - Minitaly{% endblock %}
 {% block content %}
 <div class="container mt-5">
-    {% if messages %}
-            <div class="container mt-3">
-            {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
+  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
   <h2 class="mb-4">My Bookings</h2>
 
   <div class="accordion" id="bookingAccordion">
@@ -50,7 +56,6 @@
                   class="btn btn-sm btn-edit mb-2 mb-md-0"
                   >Edit</a
                 >
-                <!-- Cancel Button (opens modal) -->
                 <button
                   type="button"
                   class="btn btn-sm btn-cancel mb-2 mb-md-0"
@@ -61,59 +66,61 @@
                 </button>
               </div>
             </li>
-            <!-- Cancel Modal -->
-            <div
-              class="modal fade"
-              id="cancelModal{{ booking.id }}"
-              tabindex="-1"
-              aria-labelledby="cancelModalLabel{{ booking.id }}"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <form
-                    method="post"
-                    action="{% url 'booking_delete' booking.pk %}"
-                  >
-                    {% csrf_token %}
-                    <div class="modal-header">
-                      <h5
-                        class="modal-title"
-                        id="cancelModalLabel{{ booking.id }}"
-                      >
-                        Confirm Cancellation
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      Are you sure you want to cancel your booking on
-                      <strong>{{ booking.date }}</strong> at
-                      <strong>{{ booking.time }}</strong>?
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        No, Keep
-                      </button>
-                      <button type="submit" class="btn btn-danger">
-                        Yes, Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
             {% endfor %}
           </ul>
-          {% else %}
+
+          <!-- Modals go here, outside the <ul> but inside the for loop -->
+          {% for booking in upcoming_bookings %}
+          <div
+            class="modal fade"
+            id="cancelModal{{ booking.id }}"
+            tabindex="-1"
+            aria-labelledby="cancelModalLabel{{ booking.id }}"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form
+                  method="post"
+                  action="{% url 'booking_delete' booking.pk %}"
+                >
+                  {% csrf_token %}
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title"
+                      id="cancelModalLabel{{ booking.id }}"
+                    >
+                      Confirm Cancellation
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to cancel your booking on
+                    <strong>{{ booking.date }}</strong> at
+                    <strong>{{ booking.time }}</strong>?
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      No, Keep
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                      Yes, Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% else %}
           <p>No upcoming bookings.</p>
           {% endif %}
         </div>

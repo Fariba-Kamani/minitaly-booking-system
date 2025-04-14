@@ -15,24 +15,29 @@ from django.views.decorators.http import require_GET
 
 from .models import Booking
 from .forms import BookingForm
-from .utils import get_available_time_slots
+from .utils import get_available_time_slots, send_cancellation_email
 
 
 def home(request):
     return render(request, 'index.html')
 
-# dispatch() is the first method called when a request reaches a class-based view,
-# applying login_required to it ensures that the user must be logged in 
+
+# dispatch() is the first method called when
+# a request reaches a class-based view,
+# applying login_required to it ensures that
+# the user must be logged in
 # before any other HTTP request is processed.
 @method_decorator(login_required, name='dispatch')
 class BookingListView(generic.ListView):
     """
     Displays the logged-in user's bookings.
 
-    - Uses `get_queryset` to restrict the displayed bookings to the current user.
+    - Uses `get_queryset` to restrict the displayed bookings
+      to the current user.
     - Separates upcoming and past bookings in the context data.
     - Requires user authentication to access this view.
-    - Prevents access to other users' bookings even if URL tampering is attempted.
+    - Prevents access to other users' bookings
+      even if URL tampering is attempted.
     """
     model = Booking
     template_name = 'bookings/booking_list.html'
@@ -48,15 +53,18 @@ class BookingListView(generic.ListView):
 
         queryset = self.get_queryset()
 
-        # Filter for future or today's bookings using date greater than or equal to today
+        # Filter for future or today's bookings using
+        # date greater than or equal to today
+        # __gte = Django field look up; greater than or equal to
         context['upcoming_bookings'] = queryset.filter(
-            date__gte=now, # __gte = Django field look up; greater than or equal to
+            date__gte=now,
             is_cancelled=False
         ).order_by('date', 'time')
 
         # Filter for past bookings using date less than today
+        # __lt = Django field look up; less than
         context['past_bookings'] = queryset.filter(
-            date__lt=now # __lt = Django field look up; less than
+            date__lt=now
         ).order_by('-date', '-time')
 
         return context
@@ -82,13 +90,15 @@ class BookingUpdateView(UpdateView):
         # Defensive check: ensure the user owns this booking
         booking = get_object_or_404(Booking, pk=kwargs['pk'])
         if booking.user != request.user:
-            return HttpResponseForbidden("You are not allowed to edit this booking.")
+            return HttpResponseForbidden(
+                "You are not allowed to edit this booking.")
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        messages.success(self.request, "Your booking has been successfully updated!")
+        messages.success(self.request,
+                         "Your booking has been successfully updated!")
         return super().form_valid(form)
-    
+
 
 @method_decorator(login_required, name='dispatch')
 class BookingDeleteView(SuccessMessageMixin, DeleteView):
@@ -109,7 +119,8 @@ class BookingDeleteView(SuccessMessageMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         booking = get_object_or_404(Booking, pk=kwargs['pk'])
         if booking.user != request.user:
-            return HttpResponseForbidden("You are not allowed to cancel this booking.")
+            return HttpResponseForbidden(
+                    "You are not allowed to cancel this booking.")
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -118,16 +129,7 @@ class BookingDeleteView(SuccessMessageMixin, DeleteView):
         booking.save()
 
         # Send cancellation email
-        send_mail(
-            subject="Your booking has been cancelled - Minitaly",
-            message=f"Dear {booking.user.first_name or booking.user.username},\n\n"
-                    f"Your booking on {booking.date} at {booking.time.strftime('%H:%M')} has been cancelled.\n\n"
-                    f"If this was a mistake, please contact us to rebook.\n\n"
-                    f"Best regards,\nMinitaly",
-            from_email=None,
-            recipient_list=[booking.user.email],
-            fail_silently=False,
-        )
+        send_cancellation_email(booking)
 
         messages.success(request, self.success_message)
         return redirect(self.success_url)
@@ -154,22 +156,31 @@ class BookingCreateView(CreateView):
         # Send confirmation email to user
         send_mail(
             subject="Your booking is confirmed - Minitaly",
-            message=f"Dear {self.request.user.first_name or self.request.user.username},\n\n"
-                    f"Thank you for booking with Minitaly!\n\n"
-                    f"Here are your booking details:\n"
-                    f"Date: {form.instance.date}\n"
-                    f"Time: {form.instance.time.strftime('%H:%M')}\n"
-                    f"Guests: {form.instance.num_guests}\n"
-                    f"Special Request: {form.instance.special_request or 'None'}\n\n"
-                    f"We look forward to seeing you!\n\n"
-                    f"Best regards,\nMinitaly",
+            message=(
+                "Dear "
+                + (
+                    self.request.user.first_name
+                    or self.request.user.username
+                )
+                + ",\n\n"
+                "Thank you for booking with Minitaly!\n\n"
+                "Here are your booking details:\n"
+                f"Date: {form.instance.date}\n"
+                f"Time: {form.instance.time.strftime('%H:%M')}\n"
+                f"Guests: {form.instance.num_guests}\n"
+                "Special Request: "
+                + f"{form.instance.special_request or 'None'}\n\n"
+                "We look forward to seeing you!\n\n"
+                "Best regards,\nMinitaly"
+            ),
             from_email=None,  # Uses DEFAULT_FROM_EMAIL
             recipient_list=[self.request.user.email],
             fail_silently=False,
         )
 
         # Show success message and proceed
-        messages.success(self.request, "Your booking has been successfully created!")
+        messages.success(
+            self.request, "Your booking has been successfully created!")
         return response
 
 
@@ -180,7 +191,8 @@ def available_slots_api(request):
     API endpoint to fetch available booking time slots
     for a given date (string) and guest count (integer).
     - Only accessible by logged-in users.
-    - Returns a JSON response with available time slots from custom utility function.
+    - Returns a JSON response with available time slots
+      from custom utility function.
     """
     date_str = request.GET.get('date')
     guests = request.GET.get('guests')

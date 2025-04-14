@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+/* global initialTime, initialDate, initialGuests */
 // Get form input fields for date, number of guests, and time
 const dateField = document.getElementById('id_date');
 const guestField = document.getElementById('id_num_guests');

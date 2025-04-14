@@ -24,7 +24,7 @@
 
     <div class="col-md-3">
       <label for="time" class="form-label">Filter by Time</label>
-      <select name="time" class="form-control">
+      <select name="time" id="time" class="form-control">
         <option value="" {% if not request.GET.time %}selected{% endif %}>All times</option>
         <option value="17:00:00" {% if request.GET.time == "17:00:00" %}selected{% endif %}>17:00:00</option>
         <option value="18:00:00" {% if request.GET.time == "18:00:00" %}selected{% endif %}>18:00:00</option>
@@ -84,7 +84,6 @@
             id="cancelModal{{ booking.id }}"
             tabindex="-1"
             aria-labelledby="cancelModalLabel{{ booking.id }}"
-            aria-describedby="cancelModalBody{{ booking.id }}"
             aria-hidden="true"
           >
             <div class="modal-dialog">

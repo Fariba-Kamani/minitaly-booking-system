@@ -35,13 +35,14 @@ def generate_time_slots(date: datetime.date):
     while current <= end_time:
         slots.append(current.time())
         current += OPERATING_HOURS['interval']
-    
+
     return slots
 
 
 def get_available_time_slots(date, num_guests):
     """
-    Returns a list of time slots and their availability for a given date and group size.
+    Returns a list of time slots and their availability
+    for a given date and group size.
 
     This function:
     - Finds the best-fit table size for the requested number of guests.
@@ -53,7 +54,8 @@ def get_available_time_slots(date, num_guests):
         num_guests (int): Number of guests in the booking request.
 
     Returns:
-        list of dict: Each dict contains a time and a boolean indicating availability.
+        list of dict: Each dict contains a time and
+        a boolean indicating availability.
         ex. [{'time': 17:00, 'available': True}, ...]
     """
     all_slots = generate_time_slots(date)
@@ -73,13 +75,15 @@ def get_available_time_slots(date, num_guests):
 
     for slot in all_slots:
         # Determine the best-fitting table size for this guest count
-        suitable_sizes = sorted(size for size in TABLE_INVENTORY if size >= num_guests)
+        suitable_sizes = sorted(
+                size for size in TABLE_INVENTORY if size >= num_guests)
 
         if not suitable_sizes:
             available = False  # No suitable table exists
         else:
             best_fit = suitable_sizes[0]
-            # Check if the number of booked tables is less than what's available
+            # Check if the number of booked tables is less than
+            # what's available
             available = booked[slot][best_fit] < TABLE_INVENTORY[best_fit]
 
         available_slots.append({
@@ -92,7 +96,8 @@ def get_available_time_slots(date, num_guests):
 
 def send_cancellation_email(booking):
     """
-    Sends an email to the customer confirming that their booking has been cancelled.
+    Sends an email to the customer confirming that
+    their booking has been cancelled.
 
     Args:
         booking (Booking): The cancelled booking instance.
@@ -101,7 +106,8 @@ def send_cancellation_email(booking):
 
     message = (
         f"Dear {booking.user.first_name or booking.user.username},\n\n"
-        f"Your booking on {booking.date} at {booking.time} has been cancelled.\n"
+        f"Your booking on {booking.date} at {booking.time} has been "
+        f"cancelled.\n"
     )
 
     if booking.cancellation_reason:

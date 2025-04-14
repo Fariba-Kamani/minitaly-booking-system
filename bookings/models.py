@@ -43,7 +43,11 @@ class Booking(models.Model):
         send_reminder (bool): Whether the user wants a reminder email.
         reminder_sent (bool): Prevents duplicate reminder emails.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='bookings'
+    )
     tables = models.ManyToManyField(Table)
     date = models.DateField()
     time = models.TimeField()
